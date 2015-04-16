@@ -18,8 +18,11 @@
  */
 package xilef11.mc.realtimeclock;
 
+import xilef11.mc.realtimeclock.configuration.ConfigurationHandler;
+import xilef11.mc.realtimeclock.proxy.IProxy;
+import xilef11.mc.realtimeclock.references.Refs;
 import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.Instance;
+import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -28,14 +31,20 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
  * @author Xilef11
  *
  */
-@Mod(modid = "realtimeclock", name="Real Time Clock", version="1.7.10-0.1")
+@Mod(modid = Refs.MOD_ID, name=Refs.MOD_NAME, version=Refs.MOD_VERSION)
 public class RealTimeClock {
-	@Mod.Instance("realtimeclock")
+	
+	@Mod.Instance(Refs.MOD_ID)
 	public static RealTimeClock instance;
+	
+	@SidedProxy(clientSide=Refs.CLIENT_PROXY_CLASS, serverSide=Refs.SERVER_PROXY_CLASS)
+	public static IProxy proxy;
+	
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event){
 		//network handling
 		//mod config
+		ConfigurationHandler.init(event.getSuggestedConfigurationFile());
 		//items & blocks
 	}
 	
