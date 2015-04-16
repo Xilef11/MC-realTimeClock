@@ -1,0 +1,16 @@
+[
+{
+  "modid": "realtimeclock",
+  "name": "Real Time Clock",
+  "description": "Adds a clock with the System Time to the HUD",
+  "version": "0.1",
+  "mcversion": "1.7.10",
+  "url": "https://github.com/Xilef11/MC-realTimeClock",
+  "updateUrl": "",
+  "authorList": ["Xilef11"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
