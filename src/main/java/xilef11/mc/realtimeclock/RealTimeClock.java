@@ -18,9 +18,11 @@
  */
 package xilef11.mc.realtimeclock;
 
-import xilef11.mc.realtimeclock.configuration.ConfigurationHandler;
+import xilef11.mc.realtimeclock.handler.ConfigurationHandler;
 import xilef11.mc.realtimeclock.proxy.IProxy;
 import xilef11.mc.realtimeclock.references.Refs;
+import xilef11.mc.realtimeclock.utilities.ModLogger;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -31,7 +33,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
  * @author Xilef11
  *
  */
-@Mod(modid = Refs.MOD_ID, name=Refs.MOD_NAME, version=Refs.MOD_VERSION)
+@Mod(modid = Refs.MOD_ID, name=Refs.MOD_NAME, version=Refs.MOD_VERSION, guiFactory=Refs.GUI_FACTORY_CLASS)
 public class RealTimeClock {
 	
 	@Mod.Instance(Refs.MOD_ID)
@@ -42,21 +44,28 @@ public class RealTimeClock {
 	
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event){
+		//ModLogger.logInfo("Pre Initialization Starting");
 		//network handling
 		//mod config
 		ConfigurationHandler.init(event.getSuggestedConfigurationFile());
+		//is this even needed? FMLCommonHandler.instance().bus().register(new ConfigurationHandler());
 		//items & blocks
+		ModLogger.logInfo("Pre Initialization complete");
 	}
 	
 	@Mod.EventHandler
 	public void init(FMLInitializationEvent event){
+		//ModLogger.logInfo("Initialization Starting");
 		//guis
 		//crafting
 		//tileEntities
+		ModLogger.logInfo("Initialization complete");
 	}
 	
 	@Mod.EventHandler
 	public void postInit(FMLPostInitializationEvent event){
+		//ModLogger.logInfo("Post Initialization starting");
 		//stuff that needs to be done after init
+		ModLogger.logInfo("Post Initialization complete");
 	}
 }
