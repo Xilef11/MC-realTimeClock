@@ -7,10 +7,21 @@
  */
 package xilef11.mc.realtimeclock.proxy;
 
+import xilef11.mc.realtimeclock.client.settings.KeyBindings;
+import cpw.mods.fml.client.registry.ClientRegistry;
+
 /**
  * @author Xilef11
  *
  */
 public class ClientProxy extends CommonProxy implements IProxy {
+
+	/* (non-Javadoc)
+	 * @see xilef11.mc.realtimeclock.proxy.IProxy#registerKeyBindings()
+	 */
+	@Override
+	public void registerKeyBindings() {
+		ClientRegistry.registerKeyBinding(KeyBindings.toggle_clock);		
+	}
 
 }

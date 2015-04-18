@@ -18,6 +18,7 @@
  */
 package xilef11.mc.realtimeclock;
 
+import xilef11.mc.realtimeclock.client.handler.KeyInputHandler;
 import xilef11.mc.realtimeclock.handler.ConfigurationHandler;
 import xilef11.mc.realtimeclock.proxy.IProxy;
 import xilef11.mc.realtimeclock.references.Refs;
@@ -56,6 +57,9 @@ public class RealTimeClock {
 	@Mod.EventHandler
 	public void init(FMLInitializationEvent event){
 		//ModLogger.logInfo("Initialization Starting");
+		//keyBindings
+		//FMLCommonHandler.instance().bus().register(new KeyInputHandler());
+		proxy.registerKeyBindings();
 		//guis
 		//crafting
 		//tileEntities

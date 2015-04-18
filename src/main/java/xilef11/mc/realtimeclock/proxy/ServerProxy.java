@@ -13,4 +13,12 @@ package xilef11.mc.realtimeclock.proxy;
  */
 public class ServerProxy extends CommonProxy implements IProxy {
 
+	/* (non-Javadoc)
+	 * @see xilef11.mc.realtimeclock.proxy.IProxy#registerKeyBindings()
+	 */
+	@Override
+	public void registerKeyBindings() {
+		// Nothing to do here!		
+	}
+
 }
