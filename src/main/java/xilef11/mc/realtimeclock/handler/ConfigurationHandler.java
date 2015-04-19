@@ -25,6 +25,8 @@ public class ConfigurationHandler {
 		public static Configuration config;
 		
 		public static boolean testValue=false;
+		//position de l'horloge
+		public static float clockPosX,clockPosY;
 	
 		public static void init(File configFile){
 			
@@ -46,7 +48,9 @@ public class ConfigurationHandler {
 			
 				//read properties
 				testValue = config.getBoolean("testValue",Configuration.CATEGORY_GENERAL,true,"example config value");
-				
+				//position
+				clockPosX=config.getFloat("posX", Configuration.CATEGORY_GENERAL, 0, 0, Float.MAX_VALUE, "Horizontal (X) position of the Clock HUD");
+				clockPosY=config.getFloat("posY", Configuration.CATEGORY_GENERAL, 0, 0, Float.MAX_VALUE, "Horizontal (X) position of the Clock HUD");
 				if(config.hasChanged()) config.save();
 			
 		}

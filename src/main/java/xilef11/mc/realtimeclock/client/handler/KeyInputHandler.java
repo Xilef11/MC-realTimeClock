@@ -7,9 +7,14 @@
  */
 package xilef11.mc.realtimeclock.client.handler;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
+import xilef11.mc.realtimeclock.RealTimeClock;
+import xilef11.mc.realtimeclock.client.gui.Clock;
 import xilef11.mc.realtimeclock.client.settings.KeyBindings;
 import xilef11.mc.realtimeclock.references.Key;
 import xilef11.mc.realtimeclock.utilities.ModLogger;
+import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent;
 
@@ -22,6 +27,10 @@ public class KeyInputHandler {
 	public void handleKeyInput(InputEvent.KeyInputEvent event){
 		if(getPressedKeyBinding()==Key.TOGGLE_CLOCK){
 			//TODO DO THE THINGS
+			ModLogger.logInfo("Pressed teh Toggle Clock key");
+			Clock.toggleEnabled();
+			//player.openGui(RealTimeClock.instance, GuiClock.ID, player.worldObj, (int)player.posX, (int)player.posY, (int)player.posZ);
+			//Minecraft.getMinecraft().fontRenderer.drawString("Test", 0, 0, 0xFFFFFF);
 		}
 	}
 	

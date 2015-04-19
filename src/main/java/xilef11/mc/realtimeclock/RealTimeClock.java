@@ -19,6 +19,7 @@
 package xilef11.mc.realtimeclock;
 
 import xilef11.mc.realtimeclock.client.handler.KeyInputHandler;
+import xilef11.mc.realtimeclock.client.handler.RenderTickHandler;
 import xilef11.mc.realtimeclock.handler.ConfigurationHandler;
 import xilef11.mc.realtimeclock.proxy.IProxy;
 import xilef11.mc.realtimeclock.references.Refs;
@@ -29,6 +30,7 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.relauncher.Side;
 
 /**
  * @author Xilef11
@@ -53,14 +55,17 @@ public class RealTimeClock {
 		//items & blocks
 		ModLogger.logInfo("Pre Initialization complete");
 	}
-	
 	@Mod.EventHandler
 	public void init(FMLInitializationEvent event){
 		//ModLogger.logInfo("Initialization Starting");
 		//keyBindings
-		//FMLCommonHandler.instance().bus().register(new KeyInputHandler());
+		FMLCommonHandler.instance().bus().register(new KeyInputHandler());
 		proxy.registerKeyBindings();
 		//guis
+		if(event.getSide()==Side.CLIENT){
+			FMLCommonHandler.instance().bus().register(new RenderTickHandler());
+		}
+		//NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
 		//crafting
 		//tileEntities
 		ModLogger.logInfo("Initialization complete");
