@@ -8,12 +8,15 @@
 package xilef11.mc.realtimeclock.client.gui;
 
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import xilef11.mc.realtimeclock.utilities.ModLogger;
 import net.minecraft.client.Minecraft;
+
+import org.lwjgl.opengl.GL11;
+
+import xilef11.mc.realtimeclock.handler.ConfigurationHandler;
+import xilef11.mc.realtimeclock.utilities.RenderingPosHelper;
 
 /**
  * @author Xilef11
@@ -28,23 +31,41 @@ public class Clock {
 	 * @return true to show the clock
 	 */
 	public static boolean doesRender(Minecraft mc) {
-		// TODO when to render
+		//when to render
+		//render only if currently playing
+		if (mc.theWorld ==null ) return false;
+		if(ConfigurationHandler.showPause && mc.currentScreen instanceof net.minecraft.client.gui.GuiIngameMenu)return true;
 		if(!enabled)return false;
-		if(mc.currentScreen instanceof net.minecraft.client.gui.GuiMainMenu)return false;
 		return true;
 	}
-
+	//debugging
+	//private static int numTicks=0;
 	/**Draw the Time
 	 * 
 	 */
 	public static void draw(Minecraft mc) {
 		// get the time
-		//ModLogger.logInfo("language String: "+mc.gameSettings.language);
-		//Calendar time = Calendar.getInstance(Locale.forLanguageTag(mc.gameSettings.language));
-		//ModLogger.logInfo("TimeZone: "+TimeZone.getDefault());
 		Calendar time = Calendar.getInstance(TimeZone.getDefault(), Locale.forLanguageTag(mc.gameSettings.language));
+		//get the hour depending on the time format to use
+		int hour;
+		if(ConfigurationHandler.use24hours){
+			hour=time.get(time.HOUR_OF_DAY);
+		}else{
+			hour=time.get(time.HOUR);
+		}
+		int minute = time.get(time.MINUTE);
+		//make sure the minutes have 2 digits
+		String minuteS= minute<10? "0"+minute : String.valueOf(minute);
+		int xPos=RenderingPosHelper.getXPosByScreenSize(mc, ConfigurationHandler.clockPosX);
+		int yPos=RenderingPosHelper.getYPosByScreenSize(mc, ConfigurationHandler.clockPosY);
+		//numTicks++;
+		//if(numTicks>40){ModLogger.logInfo("Rendering clock at "+xPos+","+yPos);numTicks=0;}
 		//ModLogger.logInfo(time.HOUR_OF_DAY+" : "+time.MINUTE);
-		mc.fontRenderer.drawString(time.get(time.HOUR_OF_DAY)+" : "+time.get(time.MINUTE), 0, 0, 0);
+		float scale=ConfigurationHandler.clockScale/100;
+		GL11.glPushMatrix();
+		GL11.glScalef(scale, scale, 1);
+		mc.fontRenderer.drawString(hour+" : "+minuteS, xPos, yPos, ConfigurationHandler.color,ConfigurationHandler.color>0x909090);
+		GL11.glPopMatrix();
 	}
 	
 }

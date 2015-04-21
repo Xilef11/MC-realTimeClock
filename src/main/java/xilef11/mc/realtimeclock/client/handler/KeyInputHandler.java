@@ -27,10 +27,8 @@ public class KeyInputHandler {
 	public void handleKeyInput(InputEvent.KeyInputEvent event){
 		if(getPressedKeyBinding()==Key.TOGGLE_CLOCK){
 			//TODO DO THE THINGS
-			ModLogger.logInfo("Pressed teh Toggle Clock key");
+			//ModLogger.logInfo("Pressed teh Toggle Clock key");
 			Clock.toggleEnabled();
-			//player.openGui(RealTimeClock.instance, GuiClock.ID, player.worldObj, (int)player.posX, (int)player.posY, (int)player.posZ);
-			//Minecraft.getMinecraft().fontRenderer.drawString("Test", 0, 0, 0xFFFFFF);
 		}
 	}
 	

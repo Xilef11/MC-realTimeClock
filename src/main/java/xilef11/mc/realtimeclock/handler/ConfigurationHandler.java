@@ -7,10 +7,14 @@
  */
 package xilef11.mc.realtimeclock.handler;
 
+import java.util.regex.Pattern;
 import java.io.File;
 import java.io.IOException;
 
+import org.apache.logging.log4j.Level;
+
 import xilef11.mc.realtimeclock.references.Refs;
+import xilef11.mc.realtimeclock.utilities.ModLogger;
 import cpw.mods.fml.client.event.ConfigChangedEvent;
 import cpw.mods.fml.common.LoadController;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -24,9 +28,16 @@ public class ConfigurationHandler {
 
 		public static Configuration config;
 		
-		public static boolean testValue=false;
+		//Time as 24H
+		public static boolean use24hours=true;
 		//position de l'horloge
 		public static float clockPosX,clockPosY;
+		//scale
+		public static float clockScale;
+		//color
+		public static int color;
+		//show in which menus
+		public static boolean showPause;
 	
 		public static void init(File configFile){
 			
@@ -37,7 +48,7 @@ public class ConfigurationHandler {
 		}
 		
 		@SubscribeEvent
-		public static void onConfigurationChanged(ConfigChangedEvent.OnConfigChangedEvent event){
+		public void onConfigurationChanged(ConfigChangedEvent.OnConfigChangedEvent event){
 			if(event.modID.equals(Refs.MOD_ID)){
 				//resync configs
 				loadConfiguration();
@@ -47,11 +58,27 @@ public class ConfigurationHandler {
 		private static void loadConfiguration(){
 			
 				//read properties
-				testValue = config.getBoolean("testValue",Configuration.CATEGORY_GENERAL,true,"example config value");
+				//24 hours?
+				use24hours=config.getBoolean("use24hours", Configuration.CATEGORY_GENERAL, true, "Set to false to use a 12-hour clock");
 				//position
-				clockPosX=config.getFloat("posX", Configuration.CATEGORY_GENERAL, 0, 0, Float.MAX_VALUE, "Horizontal (X) position of the Clock HUD");
-				clockPosY=config.getFloat("posY", Configuration.CATEGORY_GENERAL, 0, 0, Float.MAX_VALUE, "Horizontal (X) position of the Clock HUD");
-				if(config.hasChanged()) config.save();
+				clockPosX=config.getFloat("posX", Configuration.CATEGORY_GENERAL, 0.5F, 0, 100, "Horizontal (X) position of the Clock HUD (as % of screen size)\nA too large value will be off-screen");
+				clockPosY=config.getFloat("posY", Configuration.CATEGORY_GENERAL, 79.5F, 0, 100, "Vertical (Y) position of the Clock HUD (as % of screen size)\nA too large value will be off-screen");
+				//size
+				clockScale=config.getFloat("clockScale", Configuration.CATEGORY_GENERAL, 120, 0, Float.MAX_VALUE, "The Size of the clock (in % of the standard MC String size)");
+				//colour
+				Pattern hexCol= Pattern.compile("[0-9[A-F]]{6}?");
+				String col=config.getString("color", Configuration.CATEGORY_GENERAL, "AAAAAA", "Colour of the clock display, in Hexadecimal (from 0 to F for each of RRGGBB)", hexCol);
+				try{
+					color=Integer.parseInt(col, 16);
+				}catch(NumberFormatException e){
+					ModLogger.logException(Level.WARN, e, "Wrong Color String");
+				}
+				if(config.hasChanged()){
+					//ModLogger.logInfo("Config has changed");
+					config.save();
+				}
+				//show on pause menu
+				showPause=config.getBoolean("showDebug", Configuration.CATEGORY_GENERAL, true, "if true, the clock will always be shown in the pause menu");
 			
 		}
 }

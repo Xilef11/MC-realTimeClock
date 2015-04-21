@@ -51,7 +51,7 @@ public class RealTimeClock {
 		//network handling
 		//mod config
 		ConfigurationHandler.init(event.getSuggestedConfigurationFile());
-		//is this even needed? FMLCommonHandler.instance().bus().register(new ConfigurationHandler());
+		FMLCommonHandler.instance().bus().register(new ConfigurationHandler());
 		//items & blocks
 		ModLogger.logInfo("Pre Initialization complete");
 	}
@@ -65,7 +65,6 @@ public class RealTimeClock {
 		if(event.getSide()==Side.CLIENT){
 			FMLCommonHandler.instance().bus().register(new RenderTickHandler());
 		}
-		//NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
 		//crafting
 		//tileEntities
 		ModLogger.logInfo("Initialization complete");
