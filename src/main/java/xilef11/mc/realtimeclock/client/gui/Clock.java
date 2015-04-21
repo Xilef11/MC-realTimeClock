@@ -64,7 +64,7 @@ public class Clock {
 		float scale=ConfigurationHandler.clockScale/100;
 		GL11.glPushMatrix();
 		GL11.glScalef(scale, scale, 1);
-		mc.fontRenderer.drawString(hour+" : "+minuteS, xPos, yPos, ConfigurationHandler.color,ConfigurationHandler.color>0x909090);
+		mc.fontRenderer.drawString(hour+" : "+minuteS, Math.round(xPos/scale), Math.round(yPos/scale), ConfigurationHandler.color,ConfigurationHandler.drawShadow);
 		GL11.glPopMatrix();
 	}
 	

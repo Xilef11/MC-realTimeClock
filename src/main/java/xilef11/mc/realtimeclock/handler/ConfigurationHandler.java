@@ -36,6 +36,7 @@ public class ConfigurationHandler {
 		public static float clockScale;
 		//color
 		public static int color;
+		public static boolean drawShadow;
 		//show in which menus
 		public static boolean showPause;
 	
@@ -73,12 +74,14 @@ public class ConfigurationHandler {
 				}catch(NumberFormatException e){
 					ModLogger.logException(Level.WARN, e, "Wrong Color String");
 				}
+				drawShadow=config.getBoolean("drawShadow", Configuration.CATEGORY_GENERAL, true, "Set to false to disable drawing the Shadow of the clock (recommended for dark colors)");
+				//show on pause menu
+				showPause=config.getBoolean("showDebug", Configuration.CATEGORY_GENERAL, true, "if true, the clock will always be shown in the pause menu");
+				
 				if(config.hasChanged()){
 					//ModLogger.logInfo("Config has changed");
 					config.save();
 				}
-				//show on pause menu
-				showPause=config.getBoolean("showDebug", Configuration.CATEGORY_GENERAL, true, "if true, the clock will always be shown in the pause menu");
 			
 		}
 }
