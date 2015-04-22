@@ -34,7 +34,7 @@ public class Clock {
 		//when to render
 		//render only if currently playing
 		if (mc.theWorld ==null ) return false;
-		if(ConfigurationHandler.showPause && mc.currentScreen instanceof net.minecraft.client.gui.GuiIngameMenu)return true;
+		//if(ConfigurationHandler.showPause && mc.currentScreen instanceof net.minecraft.client.gui.GuiIngameMenu)return true;
 		if(!enabled)return false;
 		return true;
 	}

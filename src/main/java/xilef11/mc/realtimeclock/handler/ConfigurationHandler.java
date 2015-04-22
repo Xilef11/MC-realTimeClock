@@ -38,7 +38,7 @@ public class ConfigurationHandler {
 		public static int color;
 		public static boolean drawShadow;
 		//show in which menus
-		public static boolean showPause;
+		//public static boolean showPause;
 	
 		public static void init(File configFile){
 			
@@ -76,7 +76,7 @@ public class ConfigurationHandler {
 				}
 				drawShadow=config.getBoolean("drawShadow", Configuration.CATEGORY_GENERAL, true, "Set to false to disable drawing the Shadow of the clock (recommended for dark colors)");
 				//show on pause menu
-				showPause=config.getBoolean("showDebug", Configuration.CATEGORY_GENERAL, true, "if true, the clock will always be shown in the pause menu");
+				//showPause=config.getBoolean("showDebug", Configuration.CATEGORY_GENERAL, true, "if true, the clock will always be shown in the pause menu");
 				
 				if(config.hasChanged()){
 					//ModLogger.logInfo("Config has changed");
