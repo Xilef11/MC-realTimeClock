@@ -34,7 +34,7 @@ import cpw.mods.fml.relauncher.Side;
  * @author Xilef11
  *
  */
-@Mod(modid = Refs.MOD_ID, name=Refs.MOD_NAME, version=Refs.MOD_VERSION, guiFactory=Refs.GUI_FACTORY_CLASS)
+@Mod(modid = Refs.MOD_ID, name=Refs.MOD_NAME, version=Refs.MOD_VERSION, guiFactory=Refs.GUI_FACTORY_CLASS, canBeDeactivated=true)
 public class RealTimeClock {
 	
 	@Mod.Instance(Refs.MOD_ID)
