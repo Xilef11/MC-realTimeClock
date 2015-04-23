@@ -7,6 +7,8 @@
  */
 package xilef11.mc.realtimeclock.proxy;
 
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+
 /**
  * @author Xilef11
  *
@@ -14,5 +16,5 @@ package xilef11.mc.realtimeclock.proxy;
 public interface IProxy {
 	
 	public abstract void registerKeyBindings();
-	
+	public abstract void initConfig(FMLPreInitializationEvent event);
 }

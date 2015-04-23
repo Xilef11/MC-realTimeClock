@@ -62,8 +62,8 @@ public class ConfigurationHandler {
 				//24 hours?
 				use24hours=config.getBoolean("use24hours", Configuration.CATEGORY_GENERAL, true, "Set to false to use a 12-hour clock");
 				//position
-				clockPosX=config.getFloat("posX", Configuration.CATEGORY_GENERAL, 0.5F, 0, 100, "Horizontal (X) position of the Clock HUD (as % of screen size)\nA too large value will be off-screen");
-				clockPosY=config.getFloat("posY", Configuration.CATEGORY_GENERAL, 79.5F, 0, 100, "Vertical (Y) position of the Clock HUD (as % of screen size)\nA too large value will be off-screen");
+				clockPosX=config.getFloat("posX", Configuration.CATEGORY_GENERAL, 0.5F, 0, 100, "Horizontal (X) position of the Clock HUD (as % of screen size)\nA too large value will be off screen");
+				clockPosY=config.getFloat("posY", Configuration.CATEGORY_GENERAL, 95F, 0, 100, "Vertical (Y) position of the Clock HUD (as % of screen size)\nA too large value will be off screen");
 				//size
 				clockScale=config.getFloat("clockScale", Configuration.CATEGORY_GENERAL, 120, 0, Float.MAX_VALUE, "The Size of the clock (in % of the standard MC String size)");
 				//colour

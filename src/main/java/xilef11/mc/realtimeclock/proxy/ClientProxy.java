@@ -7,8 +7,12 @@
  */
 package xilef11.mc.realtimeclock.proxy;
 
+import xilef11.mc.realtimeclock.client.handler.KeyInputHandler;
 import xilef11.mc.realtimeclock.client.settings.KeyBindings;
+import xilef11.mc.realtimeclock.handler.ConfigurationHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
 /**
  * @author Xilef11
@@ -21,7 +25,18 @@ public class ClientProxy extends CommonProxy implements IProxy {
 	 */
 	@Override
 	public void registerKeyBindings() {
+		FMLCommonHandler.instance().bus().register(new KeyInputHandler());
 		ClientRegistry.registerKeyBinding(KeyBindings.toggle_clock);		
 	}
+
+	/* (non-Javadoc)
+	 * @see xilef11.mc.realtimeclock.proxy.IProxy#initConfig(cpw.mods.fml.common.event.FMLPreInitializationEvent)
+	 */
+	@Override
+	public void initConfig(FMLPreInitializationEvent event) {
+		ConfigurationHandler.init(event.getSuggestedConfigurationFile());
+		FMLCommonHandler.instance().bus().register(new ConfigurationHandler());
+	}
+	
 
 }

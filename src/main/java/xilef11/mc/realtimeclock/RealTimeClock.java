@@ -18,9 +18,7 @@
  */
 package xilef11.mc.realtimeclock;
 
-import xilef11.mc.realtimeclock.client.handler.KeyInputHandler;
 import xilef11.mc.realtimeclock.client.handler.RenderTickHandler;
-import xilef11.mc.realtimeclock.handler.ConfigurationHandler;
 import xilef11.mc.realtimeclock.proxy.IProxy;
 import xilef11.mc.realtimeclock.references.Refs;
 import xilef11.mc.realtimeclock.utilities.ModLogger;
@@ -50,8 +48,7 @@ public class RealTimeClock {
 		//ModLogger.logInfo("Pre Initialization Starting");
 		//network handling
 		//mod config
-		ConfigurationHandler.init(event.getSuggestedConfigurationFile());
-		FMLCommonHandler.instance().bus().register(new ConfigurationHandler());
+		proxy.initConfig(event);
 		//items & blocks
 		ModLogger.logInfo("Pre Initialization complete");
 	}
@@ -59,7 +56,6 @@ public class RealTimeClock {
 	public void init(FMLInitializationEvent event){
 		//ModLogger.logInfo("Initialization Starting");
 		//keyBindings
-		FMLCommonHandler.instance().bus().register(new KeyInputHandler());
 		proxy.registerKeyBindings();
 		//guis
 		if(event.getSide()==Side.CLIENT){
