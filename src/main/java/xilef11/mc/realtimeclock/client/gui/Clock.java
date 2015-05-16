@@ -27,6 +27,8 @@ public class Clock {
 	
 	public static void toggleEnabled(){enabled=!enabled;}
 	
+	public static boolean isEnabled(){return enabled;}
+	
 	/** Do we want to show the clock
 	 * @return true to show the clock
 	 */

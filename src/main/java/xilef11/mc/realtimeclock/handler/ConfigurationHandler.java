@@ -39,7 +39,10 @@ public class ConfigurationHandler {
 		public static boolean drawShadow;
 		//show in which menus
 		//public static boolean showPause;
-	
+		//is the clock displayed
+		public static boolean display;
+		public static final String CATEGORY_VALUES="stored values";
+		
 		public static void init(File configFile){
 			
 			if(config==null){
@@ -77,11 +80,18 @@ public class ConfigurationHandler {
 				drawShadow=config.getBoolean("drawShadow", Configuration.CATEGORY_GENERAL, true, "Set to false to disable drawing the Shadow of the clock (recommended for dark colors)");
 				//show on pause menu
 				//showPause=config.getBoolean("showDebug", Configuration.CATEGORY_GENERAL, true, "if true, the clock will always be shown in the pause menu");
-				
+				//is the clock displayed?
+				config.addCustomCategoryComment(CATEGORY_VALUES, "This section is used to store values between reloads");
+				display=config.getBoolean("displayClock", CATEGORY_VALUES, true, "is the clock displayed?");
 				if(config.hasChanged()){
 					//ModLogger.logInfo("Config has changed");
 					config.save();
 				}
 			
+		}
+		public static void setValueDisplay(boolean b){
+			//ModLogger.logInfo("Setting config value displayClock to "+b);
+			config.getCategory(CATEGORY_VALUES).get("displayClock").set(b);
+			config.save();
 		}
 }

@@ -18,7 +18,9 @@
  */
 package xilef11.mc.realtimeclock;
 
+import xilef11.mc.realtimeclock.client.gui.Clock;
 import xilef11.mc.realtimeclock.client.handler.RenderTickHandler;
+import xilef11.mc.realtimeclock.handler.ConfigurationHandler;
 import xilef11.mc.realtimeclock.proxy.IProxy;
 import xilef11.mc.realtimeclock.references.Refs;
 import xilef11.mc.realtimeclock.utilities.ModLogger;
@@ -28,6 +30,7 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import cpw.mods.fml.relauncher.Side;
 
 /**
@@ -70,6 +73,18 @@ public class RealTimeClock {
 	public void postInit(FMLPostInitializationEvent event){
 		//ModLogger.logInfo("Post Initialization starting");
 		//stuff that needs to be done after init
+		//set the "enabled" value of the clock
+		if(Clock.isEnabled()!=ConfigurationHandler.display){
+			Clock.toggleEnabled();
+		}
 		ModLogger.logInfo("Post Initialization complete");
+	}
+	@Mod.EventHandler
+	public void onServerStopping(FMLServerStoppingEvent event){
+		if(event.getSide()==Side.CLIENT){
+			//when the server stops (hopefully this is the right event), save the state of the clock
+			ModLogger.logInfo("Saving clock state for the next reload");
+			ConfigurationHandler.setValueDisplay(Clock.isEnabled());
+		}
 	}
 }
