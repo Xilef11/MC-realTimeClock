@@ -18,9 +18,7 @@
  */
 package xilef11.mc.realtimeclock;
 
-import net.minecraftforge.common.MinecraftForge;
 import xilef11.mc.realtimeclock.client.gui.Clock;
-import xilef11.mc.realtimeclock.client.handler.RGOEventHandler;
 import xilef11.mc.realtimeclock.client.handler.RenderTickHandler;
 import xilef11.mc.realtimeclock.handler.ConfigurationHandler;
 import xilef11.mc.realtimeclock.proxy.IProxy;
@@ -65,7 +63,6 @@ public class RealTimeClock {
 		//guis
 		if(event.getSide()==Side.CLIENT){
 			FMLCommonHandler.instance().bus().register(new RenderTickHandler());
-			//MinecraftForge.EVENT_BUS.register(new RGOEventHandler());
 		}
 		//crafting
 		//tileEntities
