@@ -11,7 +11,7 @@ package xilef11.mc.realtimeclock.references;
  * @author Xilef11
  *
  */
-public class Refs {
+public final class Refs {
 
 	public static final String MOD_ID="realtimeclock";
 	public static final String MOD_NAME="Real Time Clock";
