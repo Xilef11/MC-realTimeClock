@@ -18,20 +18,20 @@
  */
 package xilef11.mc.realtimeclock;
 
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
+import net.minecraftforge.fml.relauncher.Side;
 import xilef11.mc.realtimeclock.client.gui.Clock;
 import xilef11.mc.realtimeclock.client.handler.RenderTickHandler;
 import xilef11.mc.realtimeclock.handler.ConfigurationHandler;
 import xilef11.mc.realtimeclock.proxy.IProxy;
 import xilef11.mc.realtimeclock.references.Refs;
 import xilef11.mc.realtimeclock.utilities.ModLogger;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerStoppingEvent;
-import cpw.mods.fml.relauncher.Side;
 
 /**
  * @author Xilef11
@@ -39,13 +39,13 @@ import cpw.mods.fml.relauncher.Side;
  */
 @Mod(modid = Refs.MOD_ID, name=Refs.MOD_NAME, version=Refs.MOD_VERSION, guiFactory=Refs.GUI_FACTORY_CLASS, canBeDeactivated=true,acceptableRemoteVersions="*")
 public class RealTimeClock {
-	
+
 	@Mod.Instance(Refs.MOD_ID)
 	public static RealTimeClock instance;
-	
+
 	@SidedProxy(clientSide=Refs.CLIENT_PROXY_CLASS, serverSide=Refs.SERVER_PROXY_CLASS)
 	public static IProxy proxy;
-	
+
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event){
 		//ModLogger.logInfo("Pre Initialization Starting");
@@ -68,7 +68,7 @@ public class RealTimeClock {
 		//tileEntities
 		ModLogger.logInfo("Initialization complete");
 	}
-	
+
 	@Mod.EventHandler
 	public void postInit(FMLPostInitializationEvent event){
 		//ModLogger.logInfo("Post Initialization starting");

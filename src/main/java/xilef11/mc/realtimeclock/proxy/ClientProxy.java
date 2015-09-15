@@ -7,12 +7,12 @@
  */
 package xilef11.mc.realtimeclock.proxy;
 
+import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import xilef11.mc.realtimeclock.client.handler.KeyInputHandler;
 import xilef11.mc.realtimeclock.client.settings.KeyBindings;
 import xilef11.mc.realtimeclock.handler.ConfigurationHandler;
-import cpw.mods.fml.client.registry.ClientRegistry;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
 /**
  * @author Xilef11
@@ -37,6 +37,6 @@ public class ClientProxy extends CommonProxy implements IProxy {
 		ConfigurationHandler.init(event.getSuggestedConfigurationFile());
 		FMLCommonHandler.instance().bus().register(new ConfigurationHandler());
 	}
-	
+
 
 }

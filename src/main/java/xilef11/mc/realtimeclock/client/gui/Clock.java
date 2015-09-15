@@ -24,11 +24,11 @@ import xilef11.mc.realtimeclock.utilities.RenderingPosHelper;
  */
 public class Clock {
 	private static boolean enabled=true;
-	
+
 	public static void toggleEnabled(){enabled=!enabled;}
-	
+
 	public static boolean isEnabled(){return enabled;}
-	
+
 	/** Do we want to show the clock
 	 * @return true to show the clock
 	 */
@@ -57,8 +57,7 @@ public class Clock {
 		boolean lightingState=GL11.glIsEnabled(GL11.GL_LIGHTING);//get the current state
 		if(lightingState)GL11.glDisable(GL11.GL_LIGHTING);//we need this off
 		//actually draw the time
-		mc.fontRenderer.drawString(getTimeString(mc), Math.round(xPos/scale), Math.round(yPos/scale), ConfigurationHandler.color,drawShadow(mc));
-		
+		mc.fontRendererObj.drawString(getTimeString(mc), Math.round(xPos/scale), Math.round(yPos/scale), ConfigurationHandler.color,drawShadow(mc));
 		if(lightingState)GL11.glEnable(GL11.GL_LIGHTING);//if it was on, turn it back on.
 		GL11.glPopMatrix();
 	}
@@ -72,11 +71,11 @@ public class Clock {
 		//get the hour depending on the time format to use
 		int hour;
 		if(ConfigurationHandler.use24hours){
-			hour=time.get(time.HOUR_OF_DAY);
+			hour=time.get(Calendar.HOUR_OF_DAY);
 		}else{
-			hour=time.get(time.HOUR);
+			hour=time.get(Calendar.HOUR);
 		}
-		int minute = time.get(time.MINUTE);
+		int minute = time.get(Calendar.MINUTE);
 		//make sure the minutes have 2 digits
 		String minuteS= minute<10? "0"+minute : String.valueOf(minute);
 		return hour+" : "+minuteS;

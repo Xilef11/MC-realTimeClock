@@ -16,7 +16,7 @@ import net.minecraft.client.gui.ScaledResolution;
  */
 public class RenderingPosHelper {
 	private RenderingPosHelper(){}
-	
+
 	/**returns the current scaled game resolution
 	 * 
 	 * @param mc the instance of Minecraft

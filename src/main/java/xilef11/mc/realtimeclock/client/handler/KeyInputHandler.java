@@ -7,16 +7,11 @@
  */
 package xilef11.mc.realtimeclock.client.handler;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
-import xilef11.mc.realtimeclock.RealTimeClock;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.InputEvent;
 import xilef11.mc.realtimeclock.client.gui.Clock;
 import xilef11.mc.realtimeclock.client.settings.KeyBindings;
 import xilef11.mc.realtimeclock.references.Key;
-import xilef11.mc.realtimeclock.utilities.ModLogger;
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.InputEvent;
 
 /**
  * @author Xilef11
@@ -31,7 +26,7 @@ public class KeyInputHandler {
 			Clock.toggleEnabled();
 		}
 	}
-	
+
 	private static Key getPressedKeyBinding(){
 		if(KeyBindings.toggle_clock.isPressed()){
 			return Key.TOGGLE_CLOCK;
