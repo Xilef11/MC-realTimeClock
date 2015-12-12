@@ -37,7 +37,7 @@ import xilef11.mc.realtimeclock.utilities.ModLogger;
  * @author Xilef11
  *
  */
-@Mod(modid = Refs.MOD_ID, name=Refs.MOD_NAME, version=Refs.MOD_VERSION, guiFactory=Refs.GUI_FACTORY_CLASS, canBeDeactivated=true,acceptableRemoteVersions="*")
+@Mod(modid = Refs.MOD_ID, name=Refs.MOD_NAME, version=Refs.MOD_VERSION, guiFactory=Refs.GUI_FACTORY_CLASS, canBeDeactivated=true,acceptableRemoteVersions="*", clientSideOnly=true)
 public class RealTimeClock {
 
 	@Mod.Instance(Refs.MOD_ID)

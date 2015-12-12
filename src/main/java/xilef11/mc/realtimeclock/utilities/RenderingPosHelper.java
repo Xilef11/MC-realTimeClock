@@ -23,7 +23,7 @@ public class RenderingPosHelper {
 	 * @return a new ScaledResolution based on the given instance
 	 */
 	private static ScaledResolution getScaledRes(Minecraft mc){
-		return new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
+		return new ScaledResolution(mc);
 	}
 	/**get the vertical position based on screen size
 	 * 
