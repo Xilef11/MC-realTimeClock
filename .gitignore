@@ -21,6 +21,7 @@ hs_err_pid*
 eclipse/
 /bin/
 *.launch
+run/
 
 #build
 build
