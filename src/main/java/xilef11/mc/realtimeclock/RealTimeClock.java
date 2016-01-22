@@ -18,6 +18,7 @@
  */
 package xilef11.mc.realtimeclock;
 
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -62,7 +63,7 @@ public class RealTimeClock {
 		proxy.registerKeyBindings();
 		//guis
 		if(event.getSide()==Side.CLIENT){
-			FMLCommonHandler.instance().bus().register(new RenderTickHandler());
+			MinecraftForge.EVENT_BUS.register(new RenderTickHandler());
 		}
 		//crafting
 		//tileEntities

@@ -7,6 +7,7 @@
  */
 package xilef11.mc.realtimeclock.proxy;
 
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -25,7 +26,7 @@ public class ClientProxy extends CommonProxy implements IProxy {
 	 */
 	@Override
 	public void registerKeyBindings() {
-		FMLCommonHandler.instance().bus().register(new KeyInputHandler());
+		MinecraftForge.EVENT_BUS.register(new KeyInputHandler());
 		ClientRegistry.registerKeyBinding(KeyBindings.toggle_clock);		
 	}
 
@@ -35,7 +36,7 @@ public class ClientProxy extends CommonProxy implements IProxy {
 	@Override
 	public void initConfig(FMLPreInitializationEvent event) {
 		ConfigurationHandler.init(event.getSuggestedConfigurationFile());
-		FMLCommonHandler.instance().bus().register(new ConfigurationHandler());
+		MinecraftForge.EVENT_BUS.register(new ConfigurationHandler());
 	}
 
 
