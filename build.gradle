@@ -1,3 +1,20 @@
+import java.util.regex.Pattern
+//--- build aliases : define a synonym here if you want a shortcut to run multiple targets
+ //https://caffeineinduced.wordpress.com/2015/01/25/run-a-list-of-gradle-tasks-in-specific-order/
+def buildAliases = [
+   'release' : ['setReleaseNumber', 'build', 'githubRelease', 'incrementBuildNumber']
+   //'release' : ['setReleaseNumber', 'build']
+]
+def expandedTaskList = []
+ 
+gradle.startParameter.taskNames.each {
+   expandedTaskList << (buildAliases[it] ? buildAliases[it] : it)
+}
+ 
+gradle.startParameter.taskNames = expandedTaskList.flatten()
+ 
+println "\n\texpanded task list: ${gradle.startParameter.taskNames }\n"
+
 // For those who want the bleeding edge
 buildscript {
     repositories {
@@ -9,9 +26,11 @@ buildscript {
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
+		classpath 'co.riiid:gradle-github-plugin:0.4.2'
     }
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'co.riiid.gradle' 
 
 /*
 // for people who want stable - not yet functional for MC 1.8.8 - we require the forgegradle 2.1 snapshot
@@ -19,12 +38,21 @@ plugins {
     id "net.minecraftforge.gradle.forge" version "2.0.2"
 }
 */
-version = "1.9-0.6-dev"
+
+//MC stuff
+def mcVersion = "1.9"
+def majorVersion = "0"
+def minorVersion = "6"
+def bugfix = ""
+def devVersion = "-dev"
+def forgeVersion="1.9-12.16.0.1770-1.9"
+
+version = "${mcVersion}-${majorVersion}.${minorVersion}${bugfix}${devVersion}"
 group= "xilef11.mc.realtimeclock" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "RealTimeClock"
 
 minecraft {
-    version = "1.9-12.16.0.1770-1.9"
+    version = forgeVersion
     runDir = "run"
     
     // the mappings can be changed at any time, and must be in the following format.
@@ -61,7 +89,7 @@ dependencies {
 }
 tasks.withType(JavaCompile) {
         options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
-    }
+}
 processResources
 {
     // this will ensure that this task is redone when the versions change.
@@ -80,4 +108,44 @@ processResources
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
+}
+task('setReleaseNumber') {
+	//println "setRelease: config"
+	if(gradle.startParameter.taskNames.contains('setReleaseNumber')){
+		print "setReleaseNumber changing "+project.version+" to "
+		project.setProperty('version',"${mcVersion}-${majorVersion}.${minorVersion}${bugfix}")
+		println project.version
+	}
+}
+task('incrementBuildNumber') << {
+//http://stackoverflow.com/questions/17448565/how-to-autoincrement-versioncode-in-android-gradle
+	def buildscript = file("build.gradle")
+	def pattern = Pattern.compile("minorVersion = \"(\\d+)\"")
+	def text = buildscript.getText()
+	def matcher = pattern.matcher(text)
+	matcher.find()
+    def versionCode = Integer.parseInt(matcher.group(1))
+    def manifestContent = matcher.replaceAll("minorVersion = \"" + ++versionCode + "\"")
+    buildscript.write(manifestContent)
+	println "incremented build number to ${mcVersion}-${majorVersion}.${versionCode}${bugfix}${devVersion}"
+}
+githubRelease.onlyIf{project.hasProperty('githubKey')}
+github {
+	if(project.hasProperty('githubKey')){
+		//println "github: "+project.version
+		owner = 'Xilef11'
+		repo = 'MC-realTimeClock'
+		token = project.githubKey
+		tagName = 'v'+project.version
+		name=tagName
+		targetCommitish = 'master'
+		draft=true
+		body = "Changelog:\n"+new File('changelog.md').getText()+"\n\nBuilt with Forge "+forgeVersion
+		assets = [
+				"build/libs/${project.archivesBaseName}-${project.version}.jar"
+				//,"build/libs/${project.archivesBaseName}-${project.version}-sources.jar"
+		]
+	}else{
+		println "no GitHub token found as project.githubKey"
+	}
 }
