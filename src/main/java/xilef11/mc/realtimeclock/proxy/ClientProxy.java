@@ -9,7 +9,6 @@ package xilef11.mc.realtimeclock.proxy;
 
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import xilef11.mc.realtimeclock.client.handler.KeyInputHandler;
 import xilef11.mc.realtimeclock.client.settings.KeyBindings;

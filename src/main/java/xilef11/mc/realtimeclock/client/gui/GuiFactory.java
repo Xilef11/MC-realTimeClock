@@ -12,8 +12,6 @@ import java.util.Set;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.fml.client.IModGuiFactory;
-import net.minecraftforge.fml.client.IModGuiFactory.RuntimeOptionCategoryElement;
-import net.minecraftforge.fml.client.IModGuiFactory.RuntimeOptionGuiHandler;
 
 /**
  * @author Xilef11
@@ -27,8 +25,6 @@ public class GuiFactory implements IModGuiFactory {
 	@Override
 	public void initialize(Minecraft minecraftInstance) {
 		//might not be used
-		// TODO Auto-generated method stub
-
 	}
 
 	/* (non-Javadoc)
@@ -45,7 +41,6 @@ public class GuiFactory implements IModGuiFactory {
 	@Override
 	public Set<RuntimeOptionCategoryElement> runtimeGuiCategories() {
 		//Might not be used
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -56,7 +51,6 @@ public class GuiFactory implements IModGuiFactory {
 	public RuntimeOptionGuiHandler getHandlerFor(
 			RuntimeOptionCategoryElement element) {
 		//might not be used
-		// TODO Auto-generated method stub
 		return null;
 	}
 

@@ -21,7 +21,6 @@ public class KeyInputHandler {
 	@SubscribeEvent
 	public void handleKeyInput(InputEvent.KeyInputEvent event){
 		if(getPressedKeyBinding()==Key.TOGGLE_CLOCK){
-			//TODO DO THE THINGS
 			//ModLogger.logInfo("Pressed teh Toggle Clock key");
 			Clock.toggleEnabled();
 		}
