@@ -142,10 +142,14 @@ task('incrementBuildNumber') << {
 	println "incremented build number to ${mcVersion}-${majorVersion}.${versionCode}${bugfix}${devVersion}"
 	//commit
 	"git commit -a -m \"Increment version to ${mcVersion}-${majorVersion}.${versionCode}${bugfix}${devVersion} after release\"".execute()
+	//"git push".execute()//push the updated build number
 }
-
+task gitPush << {
+		println "git push".execute().text().trim()
+}
 //https://github.com/riiid/gradle-github-plugin
 githubRelease.onlyIf{project.hasProperty('githubKey')}
+githubRelease.dependsOn(gitPush)//make sure everything is pushed before release so github tags the right thing
 github {
 	if(project.hasProperty('githubKey')){
 		//println "github: "+project.version
