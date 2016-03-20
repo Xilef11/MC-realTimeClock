@@ -1,2 +1,2 @@
 - Updated for Minecraft 1.9
-- testing automated releases
+- automated release

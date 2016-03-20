@@ -2,7 +2,7 @@ import java.util.regex.Pattern
 //--- build aliases : define a synonym here if you want a shortcut to run multiple targets
  //https://caffeineinduced.wordpress.com/2015/01/25/run-a-list-of-gradle-tasks-in-specific-order/
 def buildAliases = [
-   'release' : ['setReleaseNumber', 'build', 'githubRelease', 'curseforge', 'incrementBuildNumber']
+   'release' : ['setReleaseNumber', 'build', 'githubRelease', 'curseforge', 'incrementBuildNumber','gitcommit']
    //'release' : ['setReleaseNumber', 'build']
 ]
 def expandedTaskList = []
@@ -49,7 +49,7 @@ def majorVersion = "0"
 def minorVersion = "6"
 def bugfix = ""
 def devVersion = "-dev"
-def forgeVersion="1.9-12.16.0.1770-1.9"
+def forgeVersion="1.9-12.16.0.1776-1.9"
 
 version = "${mcVersion}-${majorVersion}.${minorVersion}${bugfix}${devVersion}"
 group= "xilef11.mc.realtimeclock" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
@@ -136,6 +136,9 @@ task('incrementBuildNumber') << {
     buildscript.write(manifestContent)
 	println "incremented build number to ${mcVersion}-${majorVersion}.${versionCode}${bugfix}${devVersion}"
 }
+task gitcommit(dependsOn: incrementBuildNumber, type: Exec){
+	commandLine 'git commit -a -m \"Increment version to ${mcVersion}-${majorVersion}.${versionCode}${bugfix}${devVersion} after release\"'
+}
 //https://github.com/riiid/gradle-github-plugin
 githubRelease.onlyIf{project.hasProperty('githubKey')}
 github {
@@ -147,7 +150,7 @@ github {
 		tagName = 'v'+project.version
 		name=tagName
 		targetCommitish = 'master'
-		draft=true
+		draft=false
 		prerelease = project.version.contains(devVersion)
 		body = "Changelog:\n"+new File('changelog.md').getText()+"\n\nBuilt with Forge "+forgeVersion
 		assets = [
