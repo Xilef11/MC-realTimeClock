@@ -2,7 +2,7 @@ import java.util.regex.Pattern
 //--- build aliases : define a synonym here if you want a shortcut to run multiple targets
  //https://caffeineinduced.wordpress.com/2015/01/25/run-a-list-of-gradle-tasks-in-specific-order/
 def buildAliases = [
-   'release' : ['setReleaseNumber', 'build', 'githubRelease', 'curseforge', 'incrementBuildNumber','gitcommit']
+   'release' : ['setReleaseNumber', 'build', 'githubRelease', 'curseforge', 'incrementBuildNumber']
    //'release' : ['setReleaseNumber', 'build']
 ]
 def expandedTaskList = []
@@ -135,10 +135,10 @@ task('incrementBuildNumber') << {
     def manifestContent = matcher.replaceAll("minorVersion = \"" + ++versionCode + "\"")
     buildscript.write(manifestContent)
 	println "incremented build number to ${mcVersion}-${majorVersion}.${versionCode}${bugfix}${devVersion}"
+	//commit
+	"git commit -a -m \"Increment version to ${mcVersion}-${majorVersion}.${versionCode}${bugfix}${devVersion} after release\"".execute()
 }
-task gitcommit(dependsOn: incrementBuildNumber, type: Exec){
-	commandLine 'git commit -a -m \"Increment version to ${mcVersion}-${majorVersion}.${versionCode}${bugfix}${devVersion} after release\"'
-}
+
 //https://github.com/riiid/gradle-github-plugin
 githubRelease.onlyIf{project.hasProperty('githubKey')}
 github {
