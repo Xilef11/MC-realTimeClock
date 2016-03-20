@@ -55,6 +55,16 @@ version = "${mcVersion}-${majorVersion}.${minorVersion}${bugfix}${devVersion}"
 group= "xilef11.mc.realtimeclock" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "RealTimeClock"
 
+//must be run before all other configs (but after initially setting the version)
+task('setReleaseNumber') {
+	//println "setRelease: config"
+	if(gradle.startParameter.taskNames.contains('setReleaseNumber')){
+		print "setReleaseNumber changing "+project.version+" to "
+		project.setProperty('version',"${mcVersion}-${majorVersion}.${minorVersion}${bugfix}")
+		println project.version
+	}
+}
+
 minecraft {
     version = forgeVersion
     runDir = "run"
@@ -66,6 +76,9 @@ minecraft {
     // simply re-run your setup task after changing the mappings to update your workspace.
     mappings = "snapshot_20160312"
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
+
+	replaceIn "Refs.java"
+	replace "@VERSION@", project.version 
 }
 
 dependencies {
@@ -116,14 +129,6 @@ processResources
 
 //custom tasks and configs
 
-task('setReleaseNumber') {
-	//println "setRelease: config"
-	if(gradle.startParameter.taskNames.contains('setReleaseNumber')){
-		print "setReleaseNumber changing "+project.version+" to "
-		project.setProperty('version',"${mcVersion}-${majorVersion}.${minorVersion}${bugfix}")
-		println project.version
-	}
-}
 task('incrementBuildNumber') << {
 //http://stackoverflow.com/questions/17448565/how-to-autoincrement-versioncode-in-android-gradle
 	def buildscript = file("build.gradle")
