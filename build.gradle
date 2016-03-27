@@ -132,12 +132,24 @@ processResources
 task('incrementBuildNumber') << {
 //http://stackoverflow.com/questions/17448565/how-to-autoincrement-versioncode-in-android-gradle
 	def buildscript = file("build.gradle")
-	def pattern = Pattern.compile("minorVersion = \"(\\d+)\"")
-	def text = buildscript.getText()
-	def matcher = pattern.matcher(text)
-	matcher.find()
-    def versionCode = Integer.parseInt(matcher.group(1))
-    def manifestContent = matcher.replaceAll("minorVersion = \"" + ++versionCode + "\"")
+	def manifestContent=""
+	def versionCode=""
+	if(bugfix.length()==0){
+		def pattern = Pattern.compile("minorVersion = \"(\\d+)\"")
+		def text = buildscript.getText()
+		def matcher = pattern.matcher(text)
+		matcher.find()
+		versionCode = Integer.parseInt(matcher.group(1))
+		manifestContent = matcher.replaceAll("minorVersion = \"" + ++versionCode + "\"")
+	}else{
+		def pattern = Pattern.compile("bugfix = \"\\.(\\d+)\"")
+		def text = buildscript.getText()
+		def matcher = pattern.matcher(text)
+		matcher.find()
+		versionCode = Integer.parseInt(matcher.group(1))
+		manifestContent = matcher.replaceAll("bugfix = \"." + ++versionCode + "\"")
+	}
+	
     buildscript.write(manifestContent)
 	println "incremented build number to ${mcVersion}-${majorVersion}.${versionCode}${bugfix}${devVersion}"
 	//commit
