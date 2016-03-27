@@ -47,7 +47,7 @@ plugins {
 def mcVersion = "1.9"
 def majorVersion = "0"
 def minorVersion = "6"
-def bugfix = ".1"
+def bugfix = ".2"
 def devVersion = "-dev"
 def forgeVersion="1.9-12.16.0.1811-1.9"
 
@@ -141,6 +141,7 @@ task('incrementBuildNumber') << {
 		matcher.find()
 		versionCode = Integer.parseInt(matcher.group(1))
 		manifestContent = matcher.replaceAll("minorVersion = \"" + ++versionCode + "\"")
+		println "incremented build number to ${mcVersion}-${majorVersion}.${versionCode}${bugfix}${devVersion}"
 	}else{
 		def pattern = Pattern.compile("bugfix = \"\\.(\\d+)\"")
 		def text = buildscript.getText()
@@ -148,16 +149,17 @@ task('incrementBuildNumber') << {
 		matcher.find()
 		versionCode = Integer.parseInt(matcher.group(1))
 		manifestContent = matcher.replaceAll("bugfix = \"." + ++versionCode + "\"")
+		println "incremented build number to ${mcVersion}-${majorVersion}.${minorVersion}.${versionCode}${devVersion}"
 	}
 	
     buildscript.write(manifestContent)
-	println "incremented build number to ${mcVersion}-${majorVersion}.${versionCode}${bugfix}${devVersion}"
+	
 	//commit
 	"git commit -a -m \"Increment version to ${mcVersion}-${majorVersion}.${versionCode}${bugfix}${devVersion} after release\"".execute()
 	//"git push".execute()//push the updated build number
 }
 task gitPush << {
-		println "git push".execute().text().trim()
+		"git push".execute()
 }
 //https://github.com/riiid/gradle-github-plugin
 githubRelease.onlyIf{project.hasProperty('githubKey')}
