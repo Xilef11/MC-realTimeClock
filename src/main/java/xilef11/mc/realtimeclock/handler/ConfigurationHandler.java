@@ -52,7 +52,7 @@ public class ConfigurationHandler {
 
 	@SubscribeEvent
 	public void onConfigurationChanged(ConfigChangedEvent.OnConfigChangedEvent event){
-		if(event.modID.equals(Refs.MOD_ID)){
+		if(event.getModID().equals(Refs.MOD_ID)){
 			//resync configs
 			loadConfiguration();
 		}

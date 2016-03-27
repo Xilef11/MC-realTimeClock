@@ -46,10 +46,10 @@ plugins {
 //MC stuff
 def mcVersion = "1.9"
 def majorVersion = "0"
-def minorVersion = "7"
-def bugfix = ""
+def minorVersion = "6"
+def bugfix = ".1"
 def devVersion = "-dev"
-def forgeVersion="1.9-12.16.0.1776-1.9"
+def forgeVersion="1.9-12.16.0.1811-1.9"
 
 version = "${mcVersion}-${majorVersion}.${minorVersion}${bugfix}${devVersion}"
 group= "xilef11.mc.realtimeclock" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
