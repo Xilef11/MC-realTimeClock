@@ -55,6 +55,11 @@ version = "${mcVersion}-${majorVersion}.${minorVersion}${bugfix}${devVersion}"
 group= "xilef11.mc.realtimeclock" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "RealTimeClock"
 
+def ENV = System.getenv()
+if (ENV.DRONE_BUILD_NUMBER) {
+    version += "." + ENV.DRONE_BUILD_NUMBER
+}
+
 //must be run before all other configs (but after initially setting the version)
 task('setReleaseNumber') {
 	//println "setRelease: config"
