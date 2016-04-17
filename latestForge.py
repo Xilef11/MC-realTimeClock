@@ -44,4 +44,4 @@ if __name__=='__main__':
             
     #save the newest version
     with open("forgeversion.txt","w") as f:
-        f.write(gradleVer)
+        f.write(latest)
