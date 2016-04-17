@@ -16,7 +16,11 @@ eclipse/
 run/
 
 #build
-build
+build/
+
+#forge update checker
+forgeversion.txt
+hookURL.txt
 
 #forge
 CREDITS-fml.txt

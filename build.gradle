@@ -59,6 +59,12 @@ def ENV = System.getenv()
 if (ENV.DRONE_BUILD_NUMBER) {
     version += "." + ENV.DRONE_BUILD_NUMBER
 }
+if(ENV.CI){
+	File latestForge = file('forgeversion.txt')
+	if(latestForge.exists()){
+		forgeVersion=latestForge.read()
+	}
+}
 
 //must be run before all other configs (but after initially setting the version)
 task('setReleaseNumber') {
