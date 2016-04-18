@@ -62,7 +62,8 @@ if (ENV.DRONE_BUILD_NUMBER) {
 if(ENV.CI){
 	File latestForge = file('forgeversion.txt')
 	if(latestForge.exists()){
-		forgeVersion=latestForge.read()
+		forgeVersion=latestForge.getText()
+		println "Building with updated Forge version: "+forgeVersion
 	}
 }
 
