@@ -47,7 +47,7 @@ plugins {
 def mcVersion = "1.9"
 def majorVersion = "0"
 def minorVersion = "6"
-def bugfix = ".2"
+def bugfix = ".3"
 def devVersion = "-dev"
 def forgeVersion="1.9.4-12.17.0.1910-1.9.4"
 
@@ -170,7 +170,7 @@ task('incrementBuildNumber') << {
     buildscript.write(manifestContent)
 	
 	//commit
-	"git commit -a -m \"Increment version to ${buildnum} after release\"".execute()
+	"git commit -a -m \"Increment version to ${buildnum} after release [ci skip]\"".execute()
 	//"git push".execute()//push the updated build number
 }
 task gitPush << {
