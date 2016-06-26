@@ -7,6 +7,8 @@
  */
 package xilef11.mc.realtimeclock.client.gui;
 
+import static xilef11.mc.realtimeclock.handler.ConfigurationHandler.clockScale;
+
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -46,18 +48,17 @@ public class Clock {
 	 * 
 	 */
 	public static void draw(Minecraft mc) {
-		//get the correct position and scale
+		//get the correct position and scale TODO this should only be done when the config changes or the window is resized
 		int xPos=RenderingPosHelper.getXPosByScreenSize(mc, ConfigurationHandler.clockPosX);
 		int yPos=RenderingPosHelper.getYPosByScreenSize(mc, ConfigurationHandler.clockPosY);
-		float scale=ConfigurationHandler.clockScale/100;
 		//draw the time
 		GL11.glPushMatrix();
-		GL11.glScalef(scale, scale, 1);
+		GL11.glScalef(clockScale, clockScale, 1);
 		//fix for the weirdness in the achievements GUI
 		boolean lightingState=GL11.glIsEnabled(GL11.GL_LIGHTING);//get the current state
 		if(lightingState)GL11.glDisable(GL11.GL_LIGHTING);//we need this off
 		//actually draw the time
-		mc.fontRendererObj.drawString(getTimeString(mc), Math.round(xPos/scale), Math.round(yPos/scale), ConfigurationHandler.color,drawShadow(mc));
+		mc.fontRendererObj.drawString(getTimeString(mc), Math.round(xPos/clockScale), Math.round(yPos/clockScale), ConfigurationHandler.color,ConfigurationHandler.drawShadow);
 		if(lightingState)GL11.glEnable(GL11.GL_LIGHTING);//if it was on, turn it back on.
 		GL11.glPopMatrix();
 	}
@@ -66,7 +67,7 @@ public class Clock {
 	 * @return the current time as a String
 	 */
 	private static String getTimeString(Minecraft mc){
-		// get the time
+		// get the time TODO we should move away from Calendar eventually
 		Calendar time = Calendar.getInstance(TimeZone.getDefault(), Locale.forLanguageTag(mc.gameSettings.language));
 		//get the hour depending on the time format to use
 		int hour;

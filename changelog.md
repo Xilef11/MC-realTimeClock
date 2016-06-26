@@ -1,1 +1,2 @@
-- Update to MC 1.9.4
+- Update to MC 1.10
+- probably negligible performance tweaks

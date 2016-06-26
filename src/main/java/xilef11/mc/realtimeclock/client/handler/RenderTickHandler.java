@@ -30,7 +30,7 @@ public class RenderTickHandler {
 	public void onTick(RenderTickEvent event)
 	{
 		//we want the END phase
-		if (event.phase.equals(Phase.START))return;
+		if (!event.phase.equals(Phase.END))return;
 		if(Clock.doesRender(mcClient)){
 			Clock.draw(mcClient);
 		}

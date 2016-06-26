@@ -57,9 +57,8 @@ public class ConfigurationHandler {
 			loadConfiguration();
 		}
 	}
-
+	private static Pattern hexCol= Pattern.compile("[0-9[A-F]]{6}?");
 	private static void loadConfiguration(){
-
 		//read properties
 		//24 hours?
 		use24hours=config.getBoolean("use24hours", Configuration.CATEGORY_GENERAL, true, "Set to false to use a 12-hour clock");
@@ -68,8 +67,8 @@ public class ConfigurationHandler {
 		clockPosY=config.getFloat("posY", Configuration.CATEGORY_GENERAL, 95F, 0, 100, "Vertical (Y) position of the Clock HUD (as % of screen size)\nA too large value will be off screen");
 		//size
 		clockScale=config.getFloat("clockScale", Configuration.CATEGORY_GENERAL, 120, 0, Float.MAX_VALUE, "The Size of the clock (in % of the standard MC String size)");
+		clockScale/=100;
 		//colour
-		Pattern hexCol= Pattern.compile("[0-9[A-F]]{6}?");
 		String col=config.getString("color", Configuration.CATEGORY_GENERAL, "AAAAAA", "Colour of the clock display, in Hexadecimal (from 0 to F for each of RRGGBB)", hexCol);
 		try{
 			color=Integer.parseInt(col, 16);
@@ -77,11 +76,10 @@ public class ConfigurationHandler {
 			ModLogger.logException(Level.WARN, e, "Wrong Color String");
 		}
 		drawShadow=config.getBoolean("drawShadow", Configuration.CATEGORY_GENERAL, true, "Set to false to disable drawing the Shadow of the clock (recommended for dark colors)");
-		//show on pause menu
-		//showPause=config.getBoolean("showDebug", Configuration.CATEGORY_GENERAL, true, "if true, the clock will always be shown in the pause menu");
 		//is the clock displayed?
 		config.addCustomCategoryComment(CATEGORY_VALUES, "This section is used to store values between reloads");
 		display=config.getBoolean("displayClock", CATEGORY_VALUES, true, "is the clock displayed?");
+		
 		if(config.hasChanged()){
 			//ModLogger.logInfo("Config has changed");
 			config.save();
