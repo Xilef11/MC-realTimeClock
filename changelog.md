@@ -1,2 +1,1 @@
-- Update to MC 1.10
-- probably negligible performance tweaks
+- Fix versionning
