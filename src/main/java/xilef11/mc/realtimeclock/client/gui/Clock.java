@@ -14,10 +14,14 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import net.minecraft.client.Minecraft;
+import net.minecraftforge.fml.client.event.ConfigChangedEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
 import xilef11.mc.realtimeclock.handler.ConfigurationHandler;
+import xilef11.mc.realtimeclock.references.Refs;
 import xilef11.mc.realtimeclock.utilities.RenderingPosHelper;
 
 /**
@@ -25,10 +29,19 @@ import xilef11.mc.realtimeclock.utilities.RenderingPosHelper;
  *
  */
 public class Clock {
+
 	private static boolean enabled=true;
 
-	public static void toggleEnabled(){enabled=!enabled;}
-
+	public static void toggleEnabled(){
+		enabled=!enabled;
+		if(!enabled)resetPosition();//force recalculate on reactivation.
+	}
+	/** Calling this causes the clock's position (in pixels) 
+	 * to be recalculated on the next frame it is rendered
+	 */
+	public static void resetPosition(){
+		xPos=yPos=-1;
+	}
 	public static boolean isEnabled(){return enabled;}
 
 	/** Do we want to show the clock
@@ -44,13 +57,19 @@ public class Clock {
 	}
 	//debugging
 	//private static int numTicks=0;
+	//position of the clock in pixels
+	private static int xPos = -1,
+					   yPos = -1;
 	/**Draw the Time
 	 * 
 	 */
 	public static void draw(Minecraft mc) {
-		//get the correct position and scale TODO this should only be done when the config changes or the window is resized
-		int xPos=RenderingPosHelper.getXPosByScreenSize(mc, ConfigurationHandler.clockPosX);
-		int yPos=RenderingPosHelper.getYPosByScreenSize(mc, ConfigurationHandler.clockPosY);
+		//get the correct position and scale only if something changed
+		//FIXME Display.wasResized does not trigger when switching between windowed -> fullscreen
+		if(xPos<0||yPos<0 || Display.wasResized()){
+			xPos=RenderingPosHelper.getXPosByScreenSize(mc, ConfigurationHandler.clockPosX);
+			yPos=RenderingPosHelper.getYPosByScreenSize(mc, ConfigurationHandler.clockPosY);
+		}
 		//draw the time
 		GL11.glPushMatrix();
 		GL11.glScalef(clockScale, clockScale, 1);

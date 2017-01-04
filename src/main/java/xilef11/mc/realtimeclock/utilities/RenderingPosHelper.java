@@ -7,6 +7,8 @@
  */
 package xilef11.mc.realtimeclock.utilities;
 
+import org.lwjgl.opengl.Display;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 
@@ -24,6 +26,7 @@ public class RenderingPosHelper {
 	 */
 	private static ScaledResolution getScaledRes(Minecraft mc){
 		return new ScaledResolution(mc);
+		//TODO just putting potential methods related to detecting when window is resized here.
 	}
 	/**get the vertical position based on screen size
 	 * 

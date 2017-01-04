@@ -16,6 +16,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import org.apache.logging.log4j.Level;
 
+import xilef11.mc.realtimeclock.client.gui.Clock;
 import xilef11.mc.realtimeclock.references.Refs;
 import xilef11.mc.realtimeclock.utilities.ModLogger;
 
@@ -55,6 +56,7 @@ public class ConfigurationHandler {
 		if(event.getModID().equals(Refs.MOD_ID)){
 			//resync configs
 			loadConfiguration();
+			Clock.resetPosition();//force recalculate the position
 		}
 	}
 	private static Pattern hexCol= Pattern.compile("[0-9[A-F]]{6}?");
@@ -64,7 +66,7 @@ public class ConfigurationHandler {
 		use24hours=config.getBoolean("use24hours", Configuration.CATEGORY_GENERAL, true, "Set to false to use a 12-hour clock");
 		//position
 		clockPosX=config.getFloat("posX", Configuration.CATEGORY_GENERAL, 0.5F, 0, 100, "Horizontal (X) position of the Clock HUD (as % of screen size)\nA too large value will be off screen");
-		clockPosY=config.getFloat("posY", Configuration.CATEGORY_GENERAL, 95F, 0, 100, "Vertical (Y) position of the Clock HUD (as % of screen size)\nA too large value will be off screen");
+		clockPosY=config.getFloat("posY", Configuration.CATEGORY_GENERAL, 90F, 0, 100, "Vertical (Y) position of the Clock HUD (as % of screen size)\nA too large value will be off screen");
 		//size
 		clockScale=config.getFloat("clockScale", Configuration.CATEGORY_GENERAL, 120, 0, Float.MAX_VALUE, "The Size of the clock (in % of the standard MC String size)");
 		clockScale/=100;
