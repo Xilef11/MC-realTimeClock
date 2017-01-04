@@ -3,7 +3,7 @@ import urllib2
 import json
 import os
 
-GAMEVER = '1.10'
+GAMEVER = '1.11'
 
 def getLatestForge(game):
     #download the versions file
