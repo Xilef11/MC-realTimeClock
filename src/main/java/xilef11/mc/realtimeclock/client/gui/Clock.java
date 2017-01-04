@@ -60,12 +60,18 @@ public class Clock {
 	//position of the clock in pixels
 	private static int xPos = -1,
 					   yPos = -1;
+	private static boolean wasFullScreen=false;
 	/**Draw the Time
 	 * 
 	 */
 	public static void draw(Minecraft mc) {
 		//get the correct position and scale only if something changed
-		//FIXME Display.wasResized does not trigger when switching between windowed -> fullscreen
+		//detect the switch between windowed -> fullscreen
+		boolean fullscreen = Display.isFullscreen();
+		if((wasFullScreen && !fullscreen) || (!wasFullScreen && fullscreen)){
+			wasFullScreen=fullscreen;
+			resetPosition();
+		}
 		if(xPos<0||yPos<0 || Display.wasResized()){
 			xPos=RenderingPosHelper.getXPosByScreenSize(mc, ConfigurationHandler.clockPosX);
 			yPos=RenderingPosHelper.getYPosByScreenSize(mc, ConfigurationHandler.clockPosY);
