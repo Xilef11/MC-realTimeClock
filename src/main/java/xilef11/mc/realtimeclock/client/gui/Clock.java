@@ -14,14 +14,11 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.fml.client.event.ConfigChangedEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
 import xilef11.mc.realtimeclock.handler.ConfigurationHandler;
-import xilef11.mc.realtimeclock.references.Refs;
 import xilef11.mc.realtimeclock.utilities.RenderingPosHelper;
 
 /**
@@ -34,7 +31,10 @@ public class Clock {
 
 	public static void toggleEnabled(){
 		enabled=!enabled;
-		if(!enabled)resetPosition();//force recalculate on reactivation.
+		if(!enabled){
+			resetPosition();//force recalculate on reactivation.
+			//time=null;//reset calendar in case locale gets switched or something
+		}
 	}
 	/** Calling this causes the clock's position (in pixels) 
 	 * to be recalculated on the next frame it is rendered
@@ -87,13 +87,18 @@ public class Clock {
 		if(lightingState)GL11.glEnable(GL11.GL_LIGHTING);//if it was on, turn it back on.
 		GL11.glPopMatrix();
 	}
+	private static Calendar time = null;
 	/** returns a String with the current time according to config options
 	 * @Param mc the instance of Minecraft, required to get the localization
 	 * @return the current time as a String
 	 */
 	private static String getTimeString(Minecraft mc){
 		// get the time TODO we should move away from Calendar eventually
-		Calendar time = Calendar.getInstance(TimeZone.getDefault(), Locale.forLanguageTag(mc.gameSettings.language));
+		if(time==null){
+			time=Calendar.getInstance(TimeZone.getDefault(), Locale.forLanguageTag(mc.gameSettings.language));
+		}else{
+			time.setTimeInMillis(System.currentTimeMillis());
+		}
 		//get the hour depending on the time format to use
 		int hour;
 		if(ConfigurationHandler.use24hours){
