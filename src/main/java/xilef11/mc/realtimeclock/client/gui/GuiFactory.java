@@ -54,4 +54,20 @@ public class GuiFactory implements IModGuiFactory {
 		return null;
 	}
 
+	/* (non-Javadoc)
+	 * @see net.minecraftforge.fml.client.IModGuiFactory#hasConfigGui()
+	 */
+	@Override
+	public boolean hasConfigGui() {
+		return true;
+	}
+
+	/* (non-Javadoc)
+	 * @see net.minecraftforge.fml.client.IModGuiFactory#createConfigGui(net.minecraft.client.gui.GuiScreen)
+	 */
+	@Override
+	public GuiScreen createConfigGui(GuiScreen parentScreen) {
+		return new ModGuiConfig(parentScreen);
+	}
+
 }
