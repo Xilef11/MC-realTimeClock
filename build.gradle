@@ -30,7 +30,7 @@ buildscript {
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
 		classpath 'co.riiid:gradle-github-plugin:0.4.2'
-		classpath "gradle.plugin.com.matthewprenger:CurseGradle:1.0.7"
+		classpath "gradle.plugin.com.matthewprenger:CurseGradle:1.0.8"
     }
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
@@ -39,7 +39,7 @@ apply plugin: "com.matthewprenger.cursegradle"
 
 //MC stuff
 def majorVersion = "1"
-def minorVersion = "0"
+def minorVersion = "1"
 def bugfix = ""
 def devVersion = "-dev"
 def forgeVersion="1.12-14.21.0.2324"
@@ -206,7 +206,6 @@ if(project.hasProperty('curseKey')){
 	  apiKey = project.curseKey
 	  project {
 		id = '229797'
-		addGameVersion project.minecraft.version
 		changelogType='markdown'
 		changelog = file('changelog.md').getText()+"\n\nBuilt with Forge "+forgeVersion
 		releaseType = !project.version.contains(devVersion) ? 'release' : 'alpha'
