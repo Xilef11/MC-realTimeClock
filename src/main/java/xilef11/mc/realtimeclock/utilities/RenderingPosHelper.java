@@ -7,8 +7,6 @@
  */
 package xilef11.mc.realtimeclock.utilities;
 
-import org.lwjgl.opengl.Display;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 

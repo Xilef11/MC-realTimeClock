@@ -8,7 +8,7 @@
 package xilef11.mc.realtimeclock.proxy;
 
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import xilef11.mc.realtimeclock.utilities.ModLogger;
+import xilef11.mc.realtimeclock.RealTimeClock;
 
 /**
  * @author Xilef11
@@ -29,7 +29,7 @@ public class ServerProxy extends CommonProxy implements IProxy {
 	 */
 	@Override
 	public void initConfig(FMLPreInitializationEvent event) {
-		ModLogger.logWarn("This mod does not do anything on the server");
+		RealTimeClock.log().warn("This mod does not do anything on the server");
 
 	}
 

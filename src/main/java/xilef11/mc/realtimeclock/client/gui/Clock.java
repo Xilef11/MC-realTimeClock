@@ -83,7 +83,7 @@ public class Clock {
 		boolean lightingState=GL11.glIsEnabled(GL11.GL_LIGHTING);//get the current state
 		if(lightingState)GL11.glDisable(GL11.GL_LIGHTING);//we need this off
 		//actually draw the time
-		mc.fontRendererObj.drawString(getTimeString(mc), Math.round(xPos/clockScale), Math.round(yPos/clockScale), ConfigurationHandler.color,ConfigurationHandler.drawShadow);
+		mc.fontRenderer.drawString(getTimeString(mc), Math.round(xPos/clockScale), Math.round(yPos/clockScale), ConfigurationHandler.color,ConfigurationHandler.drawShadow);
 		if(lightingState)GL11.glEnable(GL11.GL_LIGHTING);//if it was on, turn it back on.
 		GL11.glPopMatrix();
 	}
@@ -111,16 +111,5 @@ public class Clock {
 		String minuteS= minute<10? "0"+minute : String.valueOf(minute);
 		return hour+" : "+minuteS;
 	}
-	/** should the string shadow be rendered? depends on the config and current GUI
-	 * 
-	 * @param mc
-	 * @return
-	 */
-	private static boolean drawShadow(Minecraft mc){
-		//don't draw the shadow if the config says we shouldn't
-		if(!ConfigurationHandler.drawShadow) return false;
-		//don't draw the shadow in menus to avoid bugs (i.e achievements gui...)
-		//if(mc.currentScreen != null) return false;
-		return true;
-	}
+
 }

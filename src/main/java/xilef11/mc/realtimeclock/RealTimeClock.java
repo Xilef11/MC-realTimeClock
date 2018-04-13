@@ -18,6 +18,8 @@
  */
 package xilef11.mc.realtimeclock;
 
+import org.apache.logging.log4j.Logger;
+
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -31,7 +33,6 @@ import xilef11.mc.realtimeclock.client.handler.RenderTickHandler;
 import xilef11.mc.realtimeclock.handler.ConfigurationHandler;
 import xilef11.mc.realtimeclock.proxy.IProxy;
 import xilef11.mc.realtimeclock.references.Refs;
-import xilef11.mc.realtimeclock.utilities.ModLogger;
 
 /**
  * @author Xilef11
@@ -39,7 +40,11 @@ import xilef11.mc.realtimeclock.utilities.ModLogger;
  */
 @Mod(modid = Refs.MOD_ID, name=Refs.MOD_NAME, version=Refs.MOD_VERSION, guiFactory=Refs.GUI_FACTORY_CLASS, canBeDeactivated=true,acceptableRemoteVersions="*", clientSideOnly=true)
 public class RealTimeClock {
-
+	//The mod logger
+	private static Logger log;
+	/**Returns the logger for this mod **/
+	public static Logger log(){return log;} 
+	
 	@Mod.Instance(Refs.MOD_ID)
 	public static RealTimeClock instance;
 
@@ -48,12 +53,12 @@ public class RealTimeClock {
 
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event){
-		//ModLogger.logInfo("Pre Initialization Starting");
+		log = event.getModLog();
 		//network handling
 		//mod config
 		proxy.initConfig(event);
 		//items & blocks
-		ModLogger.logInfo("Pre Initialization complete");
+		log.info("Pre Initialization complete");
 	}
 	@Mod.EventHandler
 	public void init(FMLInitializationEvent event){
@@ -66,7 +71,7 @@ public class RealTimeClock {
 		}
 		//crafting
 		//tileEntities
-		ModLogger.logInfo("Initialization complete");
+		log.info("Initialization complete");
 	}
 
 	@Mod.EventHandler
@@ -77,13 +82,13 @@ public class RealTimeClock {
 		if(Clock.isEnabled()!=ConfigurationHandler.display){
 			Clock.toggleEnabled();
 		}
-		ModLogger.logInfo("Post Initialization complete");
+		log.info("Post Initialization complete");
 	}
 	@Mod.EventHandler
 	public void onServerStopping(FMLServerStoppingEvent event){
 		if(event.getSide()==Side.CLIENT){
 			//when the server stops (hopefully this is the right event), save the state of the clock
-			ModLogger.logInfo("Saving clock state for the next reload");
+			log.info("Saving clock state for the next reload");
 			ConfigurationHandler.setValueDisplay(Clock.isEnabled());
 		}
 	}

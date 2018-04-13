@@ -28,29 +28,11 @@ public class GuiFactory implements IModGuiFactory {
 	}
 
 	/* (non-Javadoc)
-	 * @see cpw.mods.fml.client.IModGuiFactory#mainConfigGuiClass()
-	 */
-	@Override
-	public Class<? extends GuiScreen> mainConfigGuiClass() {
-		return ModGuiConfig.class;
-	}
-
-	/* (non-Javadoc)
 	 * @see cpw.mods.fml.client.IModGuiFactory#runtimeGuiCategories()
 	 */
 	@Override
 	public Set<RuntimeOptionCategoryElement> runtimeGuiCategories() {
 		//Might not be used
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see cpw.mods.fml.client.IModGuiFactory#getHandlerFor(cpw.mods.fml.client.IModGuiFactory.RuntimeOptionCategoryElement)
-	 */
-	@Override
-	public RuntimeOptionGuiHandler getHandlerFor(
-			RuntimeOptionCategoryElement element) {
-		//might not be used
 		return null;
 	}
 

@@ -14,11 +14,9 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-import org.apache.logging.log4j.Level;
-
+import xilef11.mc.realtimeclock.RealTimeClock;
 import xilef11.mc.realtimeclock.client.gui.Clock;
 import xilef11.mc.realtimeclock.references.Refs;
-import xilef11.mc.realtimeclock.utilities.ModLogger;
 
 /**
  * @author Xilef11
@@ -75,7 +73,7 @@ public class ConfigurationHandler {
 		try{
 			color=Integer.parseInt(col, 16);
 		}catch(NumberFormatException e){
-			ModLogger.logException(Level.WARN, e, "Wrong Color String");
+			RealTimeClock.log().warn("Wrong Color String",e);
 		}
 		drawShadow=config.getBoolean("drawShadow", Configuration.CATEGORY_GENERAL, true, "Set to false to disable drawing the Shadow of the clock (recommended for dark colors)");
 		//is the clock displayed?
