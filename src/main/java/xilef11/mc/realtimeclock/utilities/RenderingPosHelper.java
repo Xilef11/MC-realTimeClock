@@ -24,7 +24,6 @@ public class RenderingPosHelper {
 	 */
 	private static ScaledResolution getScaledRes(Minecraft mc){
 		return new ScaledResolution(mc);
-		//TODO just putting potential methods related to detecting when window is resized here.
 	}
 	/**get the vertical position based on screen size
 	 * 

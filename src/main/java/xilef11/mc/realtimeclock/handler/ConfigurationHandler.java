@@ -28,6 +28,8 @@ public class ConfigurationHandler {
 
 	//Time as 24H
 	public static boolean use24hours=true;
+	//show AM/PM
+	public static boolean showAMPM;
 	//position de l'horloge
 	public static float clockPosX,clockPosY;
 	//scale
@@ -62,6 +64,8 @@ public class ConfigurationHandler {
 		//read properties
 		//24 hours?
 		use24hours=config.getBoolean("use24hours", Configuration.CATEGORY_GENERAL, true, "Set to false to use a 12-hour clock");
+		//am/pm
+		showAMPM=config.getBoolean("showAMPM", Configuration.CATEGORY_GENERAL, false, "Set to true to show AM/PM");
 		//position
 		clockPosX=config.getFloat("posX", Configuration.CATEGORY_GENERAL, 0.5F, 0, 100, "Horizontal (X) position of the Clock HUD (as % of screen size)\nA too large value will be off screen");
 		clockPosY=config.getFloat("posY", Configuration.CATEGORY_GENERAL, 90F, 0, 100, "Vertical (Y) position of the Clock HUD (as % of screen size)\nA too large value will be off screen");

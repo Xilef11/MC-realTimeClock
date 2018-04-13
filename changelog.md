@@ -1,0 +1,2 @@
+- Switch to Java 8 Time API
+- Add option for AM/PM notation

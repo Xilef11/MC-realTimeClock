@@ -9,15 +9,13 @@ package xilef11.mc.realtimeclock.client.gui;
 
 import static xilef11.mc.realtimeclock.handler.ConfigurationHandler.clockScale;
 
-import java.util.Calendar;
-import java.util.Locale;
-import java.util.TimeZone;
-
-import net.minecraft.client.Minecraft;
+import java.time.LocalTime;
+import java.time.temporal.ChronoField;
 
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
+import net.minecraft.client.Minecraft;
 import xilef11.mc.realtimeclock.handler.ConfigurationHandler;
 import xilef11.mc.realtimeclock.utilities.RenderingPosHelper;
 
@@ -87,29 +85,24 @@ public class Clock {
 		if(lightingState)GL11.glEnable(GL11.GL_LIGHTING);//if it was on, turn it back on.
 		GL11.glPopMatrix();
 	}
-	private static Calendar time = null;
 	/** returns a String with the current time according to config options
 	 * @Param mc the instance of Minecraft, required to get the localization
 	 * @return the current time as a String
 	 */
 	private static String getTimeString(Minecraft mc){
-		// get the time TODO we should move away from Calendar eventually
-		if(time==null){
-			time=Calendar.getInstance(TimeZone.getDefault(), Locale.forLanguageTag(mc.gameSettings.language));
-		}else{
-			time.setTimeInMillis(System.currentTimeMillis());
-		}
+		LocalTime time = LocalTime.now();
 		//get the hour depending on the time format to use
 		int hour;
 		if(ConfigurationHandler.use24hours){
-			hour=time.get(Calendar.HOUR_OF_DAY);
+			hour=time.get(ChronoField.HOUR_OF_DAY);
 		}else{
-			hour=time.get(Calendar.HOUR);
+			hour=time.get(ChronoField.CLOCK_HOUR_OF_AMPM);
 		}
-		int minute = time.get(Calendar.MINUTE);
+		int minute = time.get(ChronoField.MINUTE_OF_HOUR);
 		//make sure the minutes have 2 digits
 		String minuteS= minute<10? "0"+minute : String.valueOf(minute);
-		return hour+" : "+minuteS;
+		return hour+" : "+minuteS + 
+				(ConfigurationHandler.showAMPM ? (time.get(ChronoField.AMPM_OF_DAY)==0? " AM" : " PM") :"");
 	}
 
 }
