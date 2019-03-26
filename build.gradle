@@ -39,7 +39,7 @@ apply plugin: "com.matthewprenger.cursegradle"
 
 //MC stuff
 def majorVersion = "1"
-def minorVersion = "2"
+def minorVersion = "3"
 def bugfix = ""
 def devVersion = "-dev"
 def forgeVersion="1.12.2-14.23.5.2823"
