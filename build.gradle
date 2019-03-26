@@ -42,7 +42,7 @@ def majorVersion = "1"
 def minorVersion = "2"
 def bugfix = ""
 def devVersion = "-dev"
-def forgeVersion="1.12.2-14.23.3.2661"
+def forgeVersion="1.12.2-14.23.5.2823"
 def mcVersion = forgeVersion.substring(0,forgeVersion.indexOf('-'))
 
 sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.

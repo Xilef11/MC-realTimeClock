@@ -51,6 +51,8 @@ public class Clock {
 		if (mc.world ==null ) return false;
 		//if(ConfigurationHandler.showPause && mc.currentScreen instanceof net.minecraft.client.gui.GuiIngameMenu)return true;
 		if(!enabled)return false;
+		//not if gui hidden with F1
+		if(mc.gameSettings.hideGUI) return false;
 		return true;
 	}
 	//debugging

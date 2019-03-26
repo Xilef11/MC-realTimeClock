@@ -1,2 +1,1 @@
-- Switch to Java 8 Time API
-- Add option for AM/PM notation
+- Hide with the rest of the GUI when F1 is pressed
