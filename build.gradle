@@ -18,22 +18,22 @@ println "\n\texpanded task list: ${gradle.startParameter.taskNames }\n"
 // For those who want the bleeding edge
 buildscript {
     repositories {
+        maven { url = 'https://files.minecraftforge.net/maven' }
         jcenter()
-        maven {
-            name = "forge"
-            url = "http://files.minecraftforge.net/maven"
-        }
+        mavenCentral()
 		maven {
 			url "https://plugins.gradle.org/m2/"
 		}
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
 		classpath 'co.riiid:gradle-github-plugin:0.4.2'
 		classpath "gradle.plugin.com.matthewprenger:CurseGradle:1.0.10"
     }
 }
-apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'eclipse'
+apply plugin: 'maven-publish'
 apply plugin: 'co.riiid.gradle' 
 apply plugin: "com.matthewprenger.cursegradle"
 
@@ -42,13 +42,10 @@ def majorVersion = "1"
 def minorVersion = "3"
 def bugfix = ""
 def devVersion = "-dev"
-def forgeVersion="1.12.2-14.23.5.2823"
+def forgeVersion="1.13.2-25.0.100"
 def mcVersion = forgeVersion.substring(0,forgeVersion.indexOf('-'))
 
-sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
-compileJava {
-    sourceCompatibility = targetCompatibility = '1.8'
-}
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
 version = "${mcVersion}-${majorVersion}.${minorVersion}${bugfix}${devVersion}"
 group= "xilef11.mc.realtimeclock" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
@@ -77,22 +74,42 @@ task('setReleaseNumber') {
 }
 
 minecraft {
-    version = forgeVersion
-    runDir = "run"
+    //version = forgeVersion
+    //runDir = "run"
     
     // the mappings can be changed at any time, and must be in the following format.
     // snapshot_YYYYMMDD   snapshot are built nightly.
     // stable_#            stables are built at the discretion of the MCP team.
     // Use non-default mappings at your own risk. they may not allways work.
     // simply re-run your setup task after changing the mappings to update your workspace.
-    mappings = "snapshot_20171003"
+    mappings channel: 'snapshot', version: '20180921-1.13'
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 
-	replaceIn "Refs.java"
-	replace "@VERSION@", project.version 
+	//replaceIn "Refs.java"
+	//replace "@VERSION@", project.version 
+	
+	runs {
+        client {
+            workingDirectory project.file('run')
+
+            // Recommended logging data for a userdev environment
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+
+            // Recommended logging level for the console
+            property 'forge.logging.console.level', 'debug'
+
+            //mods {
+            //    examplemod {
+            //       source sourceSets.main
+            //    }
+            //}
+        }
+    }
+	
 }
 
 dependencies {
+    minecraft 'net.minecraftforge:forge:'+forgeVersion
     // you may put jars on which you depend on in ./libs
     // or you may define them like so..
     //compile "some.group:artifact:version:classifier"
@@ -115,9 +132,26 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 
 }
+
+jar {
+    manifest {
+        attributes([
+            "Specification-Title": "realtimeclock",
+            "Specification-Vendor": "xilef11",
+            "Specification-Version": "1", // We are version 1 of ourselves
+            "Implementation-Title": project.name,
+            "Implementation-Version": "${version}",
+            "Implementation-Vendor" :"xilef11",
+            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        ])
+    }
+}
+
+
 tasks.withType(JavaCompile) {
         options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
 }
+/*
 processResources
 {
     // this will ensure that this task is redone when the versions change.
@@ -126,17 +160,13 @@ processResources
 
     // replace stuff in mcmod.info, nothing else
     from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
+        include 'Refs.java'
                 
         // replace version and mcversion
-        expand 'version':project.version, 'mcversion':project.minecraft.version
-    }
-        
-    // copy everything else, thats not the mcmod.info
-    from(sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
+        expand '@VERSION@':project.version
     }
 }
+*/
 
 //custom tasks and configs
 
