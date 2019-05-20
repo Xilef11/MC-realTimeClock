@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "realtimeclock",
+  "version": "${version}",
+
+  "name": "Real Time Clock",
+  "description": "Adds a clock with the System Time to the HUD",
+  "authors": [
+    "Xilef11"
+  ],
+  "contact": {
+    "homepage": "http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/2412270-real-time-clock-mod",
+    "sources": "https://github.com/Xilef11/MC-realTimeClock/"
+  },
+
+  "license": "GPL 3",
+  "icon": "assets/modid/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "net.fabricmc.example.ExampleMod"
+    ]
+  },
+  "requires": {
+    "fabricloader": ">=0.4.0",
+    "fabric": "*"
+  },
+  "suggests": {
+    "flamingo": "*"
+  }
+}
