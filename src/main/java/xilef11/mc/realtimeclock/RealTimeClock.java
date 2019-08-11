@@ -18,6 +18,7 @@
  */
 package xilef11.mc.realtimeclock;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import net.minecraftforge.common.MinecraftForge;
@@ -26,7 +27,11 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
+import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.relauncher.Side;
 import xilef11.mc.realtimeclock.client.gui.Clock;
 import xilef11.mc.realtimeclock.client.handler.RenderTickHandler;
@@ -38,44 +43,49 @@ import xilef11.mc.realtimeclock.references.Refs;
  * @author Xilef11
  *
  */
-@Mod(modid = Refs.MOD_ID, name=Refs.MOD_NAME, version=Refs.MOD_VERSION, guiFactory=Refs.GUI_FACTORY_CLASS, canBeDeactivated=true,acceptableRemoteVersions="*", clientSideOnly=true)
+//@Mod(modid = Refs.MOD_ID, name=Refs.MOD_NAME, version=Refs.MOD_VERSION, guiFactory=Refs.GUI_FACTORY_CLASS, canBeDeactivated=true,acceptableRemoteVersions="*", clientSideOnly=true)
+@Mod(Refs.MOD_ID)
 public class RealTimeClock {
 	//The mod logger
-	private static Logger log;
-	/**Returns the logger for this mod **/
-	public static Logger log(){return log;} 
+	public static final Logger log = LogManager.getLogger();
 	
-	@Mod.Instance(Refs.MOD_ID)
-	public static RealTimeClock instance;
+	public RealTimeClock() {
+		// Register the setup method for modloading
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonInit);
+        // Register the doClientStuff method for modloading
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientInit);
+        
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::postInit);
+
+        // Register ourselves for server and other game events we are interested in
+        MinecraftForge.EVENT_BUS.register(this);
+	}
+	
 
 	@SidedProxy(clientSide=Refs.CLIENT_PROXY_CLASS, serverSide=Refs.SERVER_PROXY_CLASS)
 	public static IProxy proxy;
 
-	@Mod.EventHandler
-	public void preInit(FMLPreInitializationEvent event){
-		log = event.getModLog();
+	private void commonInit(final FMLCommonSetupEvent event){
 		//network handling
 		//mod config
 		proxy.initConfig(event);
 		//items & blocks
 		log.info("Pre Initialization complete");
 	}
-	@Mod.EventHandler
-	public void init(FMLInitializationEvent event){
+	
+	private void clientInit(FMLClientSetupEvent event){
 		//ModLogger.logInfo("Initialization Starting");
 		//keyBindings
 		proxy.registerKeyBindings();
 		//guis
-		if(event.getSide()==Side.CLIENT){
-			MinecraftForge.EVENT_BUS.register(new RenderTickHandler());
-		}
+		MinecraftForge.EVENT_BUS.register(new RenderTickHandler());
 		//crafting
 		//tileEntities
 		log.info("Initialization complete");
 	}
 
-	@Mod.EventHandler
-	public void postInit(FMLPostInitializationEvent event){
+
+	private void postInit(FMLLoadCompleteEvent event){
 		//ModLogger.logInfo("Post Initialization starting");
 		//stuff that needs to be done after init
 		//set the "enabled" value of the clock
@@ -84,12 +94,11 @@ public class RealTimeClock {
 		}
 		log.info("Post Initialization complete");
 	}
-	@Mod.EventHandler
+
 	public void onServerStopping(FMLServerStoppingEvent event){
-		if(event.getSide()==Side.CLIENT){
-			//when the server stops (hopefully this is the right event), save the state of the clock
-			log.info("Saving clock state for the next reload");
-			ConfigurationHandler.setValueDisplay(Clock.isEnabled());
-		}
+		//when the server stops (hopefully this is the right event), save the state of the clock
+		log.info("Saving clock state for the next reload");
+		proxy.setClockConfigEnabled(Clock.isEnabled());
+		//ConfigurationHandler.setValueDisplay(Clock.isEnabled());
 	}
 }

@@ -7,7 +7,7 @@
  */
 package xilef11.mc.realtimeclock.proxy;
 
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
 /**
  * @author Xilef11
@@ -16,5 +16,6 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 public interface IProxy {
 
 	public abstract void registerKeyBindings();
-	public abstract void initConfig(FMLPreInitializationEvent event);
+	public abstract void initConfig(FMLCommonSetupEvent event);
+	public abstract void setClockConfigEnabled(boolean value);
 }
