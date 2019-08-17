@@ -22,21 +22,21 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.loading.FMLPaths;
 import xilef11.mc.realtimeclock.client.gui.Clock;
+import xilef11.mc.realtimeclock.client.handler.KeyInputHandler;
 import xilef11.mc.realtimeclock.client.handler.RenderTickHandler;
+import xilef11.mc.realtimeclock.client.settings.KeyBindings;
 import xilef11.mc.realtimeclock.handler.ConfigurationHandler;
-import xilef11.mc.realtimeclock.proxy.IProxy;
 import xilef11.mc.realtimeclock.references.Refs;
 
 /**
@@ -50,6 +50,9 @@ public class RealTimeClock {
 	public static final Logger log = LogManager.getLogger();
 	
 	public RealTimeClock() {
+		//setup config
+		ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ConfigurationHandler.CLIENT_CONFIG);
+		
 		// Register the setup method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonInit);
         // Register the doClientStuff method for modloading
@@ -59,16 +62,12 @@ public class RealTimeClock {
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
+        //load config
+        ConfigurationHandler.loadConfig(ConfigurationHandler.CLIENT_CONFIG, FMLPaths.CONFIGDIR.get().resolve(Refs.MOD_ID+"client.toml"));
 	}
-	
-
-	@SidedProxy(clientSide=Refs.CLIENT_PROXY_CLASS, serverSide=Refs.SERVER_PROXY_CLASS)
-	public static IProxy proxy;
 
 	private void commonInit(final FMLCommonSetupEvent event){
 		//network handling
-		//mod config
-		proxy.initConfig(event);
 		//items & blocks
 		log.info("Pre Initialization complete");
 	}
@@ -76,7 +75,8 @@ public class RealTimeClock {
 	private void clientInit(FMLClientSetupEvent event){
 		//ModLogger.logInfo("Initialization Starting");
 		//keyBindings
-		proxy.registerKeyBindings();
+		MinecraftForge.EVENT_BUS.register(new KeyInputHandler());
+		ClientRegistry.registerKeyBinding(KeyBindings.toggle_clock);	
 		//guis
 		MinecraftForge.EVENT_BUS.register(new RenderTickHandler());
 		//crafting
@@ -89,7 +89,7 @@ public class RealTimeClock {
 		//ModLogger.logInfo("Post Initialization starting");
 		//stuff that needs to be done after init
 		//set the "enabled" value of the clock
-		if(Clock.isEnabled()!=ConfigurationHandler.display){
+		if(Clock.isEnabled()!=ConfigurationHandler.display.get()){
 			Clock.toggleEnabled();
 		}
 		log.info("Post Initialization complete");
@@ -98,7 +98,8 @@ public class RealTimeClock {
 	public void onServerStopping(FMLServerStoppingEvent event){
 		//when the server stops (hopefully this is the right event), save the state of the clock
 		log.info("Saving clock state for the next reload");
-		proxy.setClockConfigEnabled(Clock.isEnabled());
+		//TODO if client
+		ConfigurationHandler.setValueDisplay(Clock.isEnabled());
 		//ConfigurationHandler.setValueDisplay(Clock.isEnabled());
 	}
 }

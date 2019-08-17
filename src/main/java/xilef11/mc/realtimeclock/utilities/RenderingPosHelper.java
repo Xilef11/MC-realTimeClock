@@ -9,6 +9,7 @@ package xilef11.mc.realtimeclock.utilities;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.main.GameConfiguration;
 
 /** Various methods to help with rendering things in the correct position
  * @author Xilef11
@@ -37,9 +38,9 @@ public class RenderingPosHelper {
 	/**get theHorizontal position based on screen size
 	 * 
 	 */
-	public static int getXPosByScreenSize(Minecraft mc, float percentage){
+	public static int getXPosByScreenSize(Minecraft mc, double percentage){
 		int width = getScaledRes(mc).getScaledWidth();
-		float decimalPercentage=percentage/100;
+		float decimalPercentage=(float)percentage/100;
 		float xPos=width*decimalPercentage;
 		return Math.round(xPos);
 	}

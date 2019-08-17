@@ -73,17 +73,22 @@ public class Clock {
 			resetPosition();
 		}
 		if(xPos<0||yPos<0 || Display.wasResized()){
-			xPos=RenderingPosHelper.getXPosByScreenSize(mc, ConfigurationHandler.clockPosX);
-			yPos=RenderingPosHelper.getYPosByScreenSize(mc, ConfigurationHandler.clockPosY);
+			xPos=RenderingPosHelper.getXPosByScreenSize(mc, ConfigurationHandler.clockPosX.get());
+			yPos=RenderingPosHelper.getYPosByScreenSize(mc, ConfigurationHandler.clockPosY.get());
 		}
 		//draw the time
 		GL11.glPushMatrix();
-		GL11.glScalef(clockScale, clockScale, 1);
+		GL11.glScaled(clockScale, clockScale, 1d);
 		//fix for the weirdness in the achievements GUI
 		boolean lightingState=GL11.glIsEnabled(GL11.GL_LIGHTING);//get the current state
 		if(lightingState)GL11.glDisable(GL11.GL_LIGHTING);//we need this off
+		
 		//actually draw the time
-		mc.fontRenderer.drawString(getTimeString(mc), Math.round(xPos/clockScale), Math.round(yPos/clockScale), ConfigurationHandler.color,ConfigurationHandler.drawShadow);
+		if(ConfigurationHandler.drawShadow.get())
+			mc.fontRenderer.drawStringWithShadow(getTimeString(mc), Math.round(xPos/clockScale), Math.round(yPos/clockScale), ConfigurationHandler.color);
+		else 
+			mc.fontRenderer.drawString(getTimeString(mc), Math.round(xPos/clockScale), Math.round(yPos/clockScale), ConfigurationHandler.color);
+		
 		if(lightingState)GL11.glEnable(GL11.GL_LIGHTING);//if it was on, turn it back on.
 		GL11.glPopMatrix();
 	}
@@ -95,7 +100,7 @@ public class Clock {
 		LocalTime time = LocalTime.now();
 		//get the hour depending on the time format to use
 		int hour;
-		if(ConfigurationHandler.use24hours){
+		if(ConfigurationHandler.use24hours.get()){
 			hour=time.get(ChronoField.HOUR_OF_DAY);
 		}else{
 			hour=time.get(ChronoField.CLOCK_HOUR_OF_AMPM);
@@ -104,7 +109,7 @@ public class Clock {
 		//make sure the minutes have 2 digits
 		String minuteS= minute<10? "0"+minute : String.valueOf(minute);
 		return hour+" : "+minuteS + 
-				(ConfigurationHandler.showAMPM ? (time.get(ChronoField.AMPM_OF_DAY)==0? " AM" : " PM") :"");
+				(ConfigurationHandler.showAMPM.get() ? (time.get(ChronoField.AMPM_OF_DAY)==0? " AM" : " PM") :"");
 	}
 
 }
