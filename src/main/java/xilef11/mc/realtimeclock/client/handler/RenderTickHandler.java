@@ -9,7 +9,6 @@ package xilef11.mc.realtimeclock.client.handler;
 
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.RenderTickEvent;
 import xilef11.mc.realtimeclock.client.gui.Clock;
@@ -23,7 +22,7 @@ public class RenderTickHandler {
 
 	public RenderTickHandler()
 	{
-		mcClient = FMLClientHandler.instance().getClient();
+		mcClient = Minecraft.getInstance();//FMLClientHandler.instance().getClient();
 	}
 
 	@SubscribeEvent
