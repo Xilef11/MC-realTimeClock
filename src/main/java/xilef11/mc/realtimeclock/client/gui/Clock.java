@@ -12,10 +12,11 @@ import static xilef11.mc.realtimeclock.handler.ConfigurationHandler.clockScale;
 import java.time.LocalTime;
 import java.time.temporal.ChronoField;
 
-import org.lwjgl.opengl.Display;
+import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
+import xilef11.mc.realtimeclock.RealTimeClock;
 import xilef11.mc.realtimeclock.handler.ConfigurationHandler;
 import xilef11.mc.realtimeclock.utilities.RenderingPosHelper;
 
@@ -61,20 +62,35 @@ public class Clock {
 	private static int xPos = -1,
 					   yPos = -1;
 	private static boolean wasFullScreen=false;
+	private static int[] width,height;
+	private static boolean wasResized() {
+		int[] newwidth= {0}, newheight= {0};
+		GLFW.glfwGetWindowSize(GLFW.glfwGetCurrentContext(), newwidth, newheight);
+		boolean changed = (newwidth!=width)||(newheight!=height);
+		width=newwidth;
+		height=newheight;
+		return changed;
+	}
 	/**Draw the Time
 	 * 
 	 */
 	public static void draw(Minecraft mc) {
 		//get the correct position and scale only if something changed
 		//detect the switch between windowed -> fullscreen
-		boolean fullscreen = Display.isFullscreen();
+		//boolean fullscreen = Display.isFullscreen();
+		boolean fullscreen = GLFW.glfwGetWindowMonitor(GLFW.glfwGetCurrentContext())==0;
 		if((wasFullScreen && !fullscreen) || (!wasFullScreen && fullscreen)){
+			RealTimeClock.log.info("Switched between windowed and fullscreen");
 			wasFullScreen=fullscreen;
 			resetPosition();
 		}
-		if(xPos<0||yPos<0 || Display.wasResized()){
-			xPos=RenderingPosHelper.getXPosByScreenSize(mc, ConfigurationHandler.clockPosX.get());
-			yPos=RenderingPosHelper.getYPosByScreenSize(mc, ConfigurationHandler.clockPosY.get());
+		if(xPos<0||yPos<0 || wasResized()){
+			int[] xy = RenderingPosHelper.getPosByScreenSize(mc, ConfigurationHandler.clockPosX.get(), 
+					ConfigurationHandler.clockPosY.get());
+			//xPos=RenderingPosHelper.getXPosByScreenSize(mc, ConfigurationHandler.clockPosX.get());
+			//yPos=RenderingPosHelper.getYPosByScreenSize(mc, ConfigurationHandler.clockPosY.get());
+			xPos = xy[0];
+			yPos = xy[1];
 		}
 		//draw the time
 		GL11.glPushMatrix();

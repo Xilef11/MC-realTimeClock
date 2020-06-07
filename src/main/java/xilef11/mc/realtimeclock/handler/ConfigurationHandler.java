@@ -45,7 +45,7 @@ public class ConfigurationHandler {
 	//show in which menus
 	//public static boolean showPause;
 	//is the clock displayed
-	public static ForgeConfigSpec.BooleanValue display;
+	public static ForgeConfigSpec.BooleanValue startOn;
 	public static int color;
 	public static final String CATEGORY_VALUES="stored values";
 	public static final String CATEGORY_GENERAL="general";
@@ -54,9 +54,6 @@ public class ConfigurationHandler {
 	
 	static {
 		CLIENT_BUILDER.comment("General Settings").push(CATEGORY_GENERAL);
-		CLIENT_BUILDER.pop();
-		CLIENT_BUILDER.comment("Saved Values").push(CATEGORY_VALUES);
-		CLIENT_BUILDER.comment("This section is used to store values between reloads");
 		CLIENT_BUILDER.pop();
 		
 		setupConfig();
@@ -93,10 +90,7 @@ public class ConfigurationHandler {
 				.define("drawShadow", true);
 				//config.getBoolean("drawShadow", Configuration.CATEGORY_GENERAL, true, "Set to false to disable drawing the Shadow of the clock (recommended for dark colors)");
 		//is the clock displayed?
-		//config.addCustomCategoryComment(CATEGORY_VALUES, "This section is used to store values between reloads");
-		CLIENT_BUILDER.pop();
-		CLIENT_BUILDER.push(CATEGORY_VALUES);
-		display=CLIENT_BUILDER.comment("is the clock displayed?").define("displayClock", true);
+		startOn=CLIENT_BUILDER.comment("Enable clock at game start?").define("startOn", true);
 				//config.getBoolean("displayClock", CATEGORY_VALUES, true, "is the clock displayed?");
 	}
 	

@@ -7,7 +7,7 @@
  */
 package xilef11.mc.realtimeclock.utilities;
 
-import org.lwjgl.opengl.Display;
+import org.lwjgl.glfw.GLFW;
 
 import net.minecraft.client.Minecraft;
 
@@ -26,14 +26,27 @@ public class RenderingPosHelper {
 //	private static ScaledResolution getScaledRes(Minecraft mc){
 //		return new ScaledResolution(mc);
 //	}
+	public static int[] getPosByScreenSize(Minecraft mc, double percentageX, double percentageY) {
+		int[] width= {0},height={0};
+		GLFW.glfwGetWindowSize(GLFW.glfwGetCurrentContext(), width, height);
+		float decimalX=(float)percentageX/100;
+		float decimalY=(float)percentageY/100;
+		float yPos=height[0]*decimalY;
+		float xPos=width[0]*decimalX;
+		int[] ret = {0,0};
+		ret[0]=Math.round(xPos);
+		ret[1] = Math.round(yPos);
+		return ret;
+	}
 	/**get the vertical position based on screen size
 	 * 
 	 */
 	public static int getYPosByScreenSize(Minecraft mc, double percentage){
 		//int height = getScaledRes(mc).getScaledHeight();
-		int height = Display.getHeight();
+		int[] width= {0},height={0};
+		GLFW.glfwGetWindowSize(GLFW.glfwGetCurrentContext(), width, height);
 		float decimalPercentage=(float)percentage/100;
-		float yPos=height*decimalPercentage;
+		float yPos=height[0]*decimalPercentage;
 		return Math.round(yPos);
 	}
 	/**get theHorizontal position based on screen size
@@ -41,9 +54,10 @@ public class RenderingPosHelper {
 	 */
 	public static int getXPosByScreenSize(Minecraft mc, double percentage){
 		//int width = getScaledRes(mc).getScaledWidth();
-		int width = Display.getWidth();
+		int[] width= {0},height={0};
+		GLFW.glfwGetWindowSize(GLFW.glfwGetCurrentContext(), width, height);
 		float decimalPercentage=(float)percentage/100;
-		float xPos=width*decimalPercentage;
+		float xPos=width[0]*decimalPercentage;
 		return Math.round(xPos);
 	}
 }

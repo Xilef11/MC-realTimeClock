@@ -7,10 +7,9 @@
  */
 package xilef11.mc.realtimeclock.client.settings;
 
+import org.lwjgl.glfw.GLFW;
+
 import net.minecraft.client.settings.KeyBinding;
-
-import org.lwjgl.input.Keyboard;
-
 import xilef11.mc.realtimeclock.references.Names;
 
 /**
@@ -19,5 +18,5 @@ import xilef11.mc.realtimeclock.references.Names;
  */
 public class KeyBindings {
 
-	public static KeyBinding toggle_clock=new KeyBinding(Names.Keys.TOGGLE_CLOCK, Keyboard.KEY_C, Names.Keys.CATEGORY);
+	public static KeyBinding toggle_clock=new KeyBinding(Names.Keys.TOGGLE_CLOCK, GLFW.GLFW_KEY_C, Names.Keys.CATEGORY);
 }

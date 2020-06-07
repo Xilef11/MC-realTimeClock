@@ -1,1 +1,1 @@
-- Hide with the rest of the GUI when F1 is pressed
+- Changed to configure "start with the clock on" instead of remembering the clock's last state

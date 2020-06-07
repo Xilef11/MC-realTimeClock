@@ -89,7 +89,7 @@ public class RealTimeClock {
 		//ModLogger.logInfo("Post Initialization starting");
 		//stuff that needs to be done after init
 		//set the "enabled" value of the clock
-		if(Clock.isEnabled()!=ConfigurationHandler.display.get()){
+		if(Clock.isEnabled()!=ConfigurationHandler.startOn.get()){
 			Clock.toggleEnabled();
 		}
 		log.info("Post Initialization complete");
