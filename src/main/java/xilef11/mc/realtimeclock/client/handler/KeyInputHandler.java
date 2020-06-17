@@ -8,7 +8,8 @@
 package xilef11.mc.realtimeclock.client.handler;
 
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.InputEvent;
+//import net.minecraftforge.fml.common.gameevent.InputEvent;
+import net.minecraftforge.client.event.InputEvent;
 import xilef11.mc.realtimeclock.client.gui.Clock;
 import xilef11.mc.realtimeclock.client.settings.KeyBindings;
 import xilef11.mc.realtimeclock.references.Key;
