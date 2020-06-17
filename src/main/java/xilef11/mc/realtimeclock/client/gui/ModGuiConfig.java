@@ -7,17 +7,36 @@
  */
 package xilef11.mc.realtimeclock.client.gui;
 
-import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponent;
+import xilef11.mc.realtimeclock.references.Refs;
 
 /**
  * @author Xilef11
  *
  */
-public class ModGuiConfig extends GuiScreen {
+public class ModGuiConfig extends Screen {
 
-	public ModGuiConfig(GuiScreen screen) {
+	public ModGuiConfig(Screen screen) {
 		//TODO 1.14
-		super();
+		super(new TextComponent() {
+			
+			@Override
+			public ITextComponent shallowCopy() {
+				try {
+					return (ITextComponent)this.clone();
+				} catch (CloneNotSupportedException e) {
+					e.printStackTrace();
+					return null;
+				}
+			}
+			
+			@Override
+			public String getUnformattedComponentText() {
+				return Refs.MOD_NAME;
+			}
+		});
 		/*super(screen, new ConfigElement(
 				ConfigurationHandler.config
 				.getCategory(Configuration.CATEGORY_GENERAL))

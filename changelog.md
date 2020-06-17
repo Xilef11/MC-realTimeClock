@@ -1,1 +1,2 @@
 - Changed to configure "start with the clock on" instead of remembering the clock's last state
+- COnfig GUI not ported

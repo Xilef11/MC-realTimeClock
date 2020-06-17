@@ -9,8 +9,9 @@ package xilef11.mc.realtimeclock.client.handler;
 
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
-import net.minecraftforge.fml.common.gameevent.TickEvent.RenderTickEvent;
+import net.minecraftforge.event.TickEvent.Phase;
+import net.minecraftforge.event.TickEvent.RenderTickEvent;
+//import net.minecraftforge.fml.common.gameevent.TickEvent.RenderTickEvent;
 import xilef11.mc.realtimeclock.client.gui.Clock;
 
 /**
