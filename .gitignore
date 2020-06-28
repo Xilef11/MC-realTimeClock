@@ -17,6 +17,7 @@ run/
 
 #build
 build/
+build.forge.old/
 
 #forge update checker
 forgeversion.txt

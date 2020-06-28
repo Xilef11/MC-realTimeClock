@@ -1,231 +1,78 @@
-import java.util.regex.Pattern
-//--- build aliases : define a synonym here if you want a shortcut to run multiple targets
- //https://caffeineinduced.wordpress.com/2015/01/25/run-a-list-of-gradle-tasks-in-specific-order/
-def buildAliases = [
-   'release' : ['setReleaseNumber', 'build', 'githubRelease', 'curseforge', 'incrementBuildNumber']
-   //'release' : ['setReleaseNumber', 'build']
-]
-def expandedTaskList = []
- 
-gradle.startParameter.taskNames.each {
-   expandedTaskList << (buildAliases[it] ? buildAliases[it] : it)
-}
- 
-gradle.startParameter.taskNames = expandedTaskList.flatten()
- 
-println "\n\texpanded task list: ${gradle.startParameter.taskNames }\n"
-
-// For those who want the bleeding edge
-buildscript {
-    repositories {
-        maven { url = 'https://files.minecraftforge.net/maven' }
-        jcenter()
-        mavenCentral()
-		maven {
-			url "https://plugins.gradle.org/m2/"
-		}
-    }
-    dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
-		classpath 'co.riiid:gradle-github-plugin:0.4.2'
-		classpath "gradle.plugin.com.matthewprenger:CurseGradle:1.0.10"
-    }
-}
-apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'eclipse'
-apply plugin: 'maven-publish'
-apply plugin: 'co.riiid.gradle' 
-apply plugin: "com.matthewprenger.cursegradle"
-
-//MC stuff
-def majorVersion = "1"
-def minorVersion = "3"
-def bugfix = ""
-def devVersion = "-dev"
-def forgeVersion="1.14.4-28.2.18"
-def mcVersion = forgeVersion.substring(0,forgeVersion.indexOf('-'))
-
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
-
-version = "${mcVersion}-${majorVersion}.${minorVersion}${bugfix}${devVersion}"
-group= "xilef11.mc.realtimeclock" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "RealTimeClock"
-
-def ENV = System.getenv()
-if (ENV.DRONE_BUILD_NUMBER) {
-    version += "." + ENV.DRONE_BUILD_NUMBER
-}
-if(ENV.CI){
-	File latestForge = file('forgeversion.txt')
-	if(latestForge.exists()){
-		forgeVersion=latestForge.getText()
-		println "Building with updated Forge version: "+forgeVersion
-	}
+plugins {
+	id 'fabric-loom' version '0.4-SNAPSHOT'
+	id 'maven-publish'
 }
 
-//must be run before all other configs (but after initially setting the version)
-task('setReleaseNumber') {
-	//println "setRelease: config"
-	if(gradle.startParameter.taskNames.contains('setReleaseNumber')){
-		print "setReleaseNumber changing "+project.version+" to "
-		project.setProperty('version',"${mcVersion}-${majorVersion}.${minorVersion}${bugfix}")
-		println project.version
-	}
-}
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 
-minecraft {
-    //version = forgeVersion
-    //runDir = "run"
-    
-    // the mappings can be changed at any time, and must be in the following format.
-    // snapshot_YYYYMMDD   snapshot are built nightly.
-    // stable_#            stables are built at the discretion of the MCP team.
-    // Use non-default mappings at your own risk. they may not allways work.
-    // simply re-run your setup task after changing the mappings to update your workspace.
-    mappings channel: 'snapshot', version: '20190719-1.14.3'
-    // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
-
-	//replaceIn "Refs.java"
-	//replace "@VERSION@", project.version 
-	
-	runs {
-        client {
-            workingDirectory project.file('run')
-
-            // Recommended logging data for a userdev environment
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-
-            // Recommended logging level for the console
-            property 'forge.logging.console.level', 'debug'
-
-            //mods {
-            //    examplemod {
-            //       source sourceSets.main
-            //    }
-            //}
-        }
-    }
-	
-}
+archivesBaseName = project.archives_base_name
+version = project.mod_version
+group = project.maven_group
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:'+forgeVersion
-    // you may put jars on which you depend on in ./libs
-    // or you may define them like so..
-    //compile "some.group:artifact:version:classifier"
-    //compile "some.group:artifact:version"
-      
-    // real examples
-    //compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
-    //compile 'com.googlecode.efficient-java-matrix-library:ejml:0.24' // adds ejml to the dev env
+	//to change the versions see the gradle.properties file
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-    // the 'provided' configuration is for optional dependencies that exist at compile-time but might not at runtime.
-    //provided 'com.mod-buildcraft:buildcraft:6.0.8:dev'
+	// Fabric API. This is technically optional, but you probably want it anyway.
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-    // the deobf configurations:  'deobfCompile' and 'deobfProvided' are the same as the normal compile and provided,
-    // except that these dependencies get remapped to your current MCP mappings
-    //deobfCompile 'com.mod-buildcraft:buildcraft:6.0.8:dev'
-    //deobfProvided 'com.mod-buildcraft:buildcraft:6.0.8:dev'
+	// PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
+	// You may need to force-disable transitiveness on them.
+}
 
-    // for more info...
-    // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
-    // http://www.gradle.org/docs/current/userguide/dependency_management.html
+processResources {
+	inputs.property "version", project.version
 
+	from(sourceSets.main.resources.srcDirs) {
+		include "fabric.mod.json"
+		expand "version": project.version
+	}
+
+	from(sourceSets.main.resources.srcDirs) {
+		exclude "fabric.mod.json"
+	}
+}
+
+// ensure that the encoding is set to UTF-8, no matter what the system default is
+// this fixes some edge cases with special characters not displaying correctly
+// see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
+tasks.withType(JavaCompile) {
+	options.encoding = "UTF-8"
+}
+
+// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
+// if it is present.
+// If you remove this task, sources will not be generated.
+task sourcesJar(type: Jar, dependsOn: classes) {
+	classifier = "sources"
+	from sourceSets.main.allSource
 }
 
 jar {
-    manifest {
-        attributes([
-            "Specification-Title": "realtimeclock",
-            "Specification-Vendor": "xilef11",
-            "Specification-Version": "1", // We are version 1 of ourselves
-            "Implementation-Title": project.name,
-            "Implementation-Version": "${version}",
-            "Implementation-Vendor" :"xilef11",
-            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
-        ])
-    }
+	from "LICENSE"
 }
 
-
-tasks.withType(JavaCompile) {
-        options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
-}
-/*
-processResources
-{
-    // this will ensure that this task is redone when the versions change.
-    inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
-
-    // replace stuff in mcmod.info, nothing else
-    from(sourceSets.main.resources.srcDirs) {
-        include 'Refs.java'
-                
-        // replace version and mcversion
-        expand '@VERSION@':project.version
-    }
-}
-*/
-
-//custom tasks and configs
-
-task('incrementBuildNumber') << {
-//http://stackoverflow.com/questions/17448565/how-to-autoincrement-versioncode-in-android-gradle
-	def buildscript = file("build.gradle")
-	def manifestContent=""
-	def versionCode=""
-	def buildnum=""
-	if(bugfix.length()==0){
-		def pattern = Pattern.compile("minorVersion = \"(\\d+)\"")
-		def text = buildscript.getText()
-		def matcher = pattern.matcher(text)
-		matcher.find()
-		versionCode = Integer.parseInt(matcher.group(1))
-		manifestContent = matcher.replaceAll("minorVersion = \"" + ++versionCode + "\"")
-		buildnum="${mcVersion}-${majorVersion}.${versionCode}${bugfix}${devVersion}"
-		println "incremented build number to ${buildnum}"
-	}else{
-		def pattern = Pattern.compile("bugfix = \"\\.(\\d+)\"")
-		def text = buildscript.getText()
-		def matcher = pattern.matcher(text)
-		matcher.find()
-		versionCode = Integer.parseInt(matcher.group(1))
-		manifestContent = matcher.replaceAll("bugfix = \"." + ++versionCode + "\"")
-		buildnum = "${mcVersion}-${majorVersion}.${minorVersion}.${versionCode}${devVersion}"
-		println "incremented build number to ${buildnum}"
+// configure the maven publication
+publishing {
+	publications {
+		mavenJava(MavenPublication) {
+			// add all the jars that should be included when publishing to maven
+			artifact(remapJar) {
+				builtBy remapJar
+			}
+			artifact(sourcesJar) {
+				builtBy remapSourcesJar
+			}
+		}
 	}
-	
-    buildscript.write(manifestContent)
-	
-	//commit
-	"git commit -a -m \"Increment version to ${buildnum} after release [ci skip]\"".execute()
-	//"git push".execute()//push the updated build number
-}
-task gitPush << {
-		"git push".execute()
-}
-//https://github.com/riiid/gradle-github-plugin
-githubRelease.onlyIf{project.hasProperty('githubKey')}
-githubRelease.dependsOn(gitPush)//make sure everything is pushed before release so github tags the right thing
-github {
-	if(project.hasProperty('githubKey')){
-		//println "github: "+project.version
-		owner = 'Xilef11'
-		repo = 'MC-realTimeClock'
-		token = project.githubKey
-		tagName = 'v'+project.version
-		name=tagName
-		targetCommitish = 'master'
-		draft=false
-		prerelease = project.version.contains(devVersion)
-		body = "Changelog:\n"+file('changelog.md').getText()+"\n\nBuilt with Forge "+forgeVersion
-		assets = [
-				"build/libs/${project.archivesBaseName}-${project.version}.jar"
-				//,"build/libs/${project.archivesBaseName}-${project.version}-sources.jar"
-		]
-	}else{
-		println "no GitHub token found as project.githubKey"
+
+	// select the repositories you want to publish to
+	repositories {
+		// uncomment to publish to the local maven
+		// mavenLocal()
 	}
 }
 
@@ -237,9 +84,21 @@ if(project.hasProperty('curseKey')){
 	  project {
 		id = '229797'
 		changelogType='markdown'
-		changelog = file('changelog.md').getText()+"\n\nBuilt with Forge "+forgeVersion
-		releaseType = !project.version.contains(devVersion) ? 'release' : 'alpha'
-		mainArtifact jar
+		changelog = file('changelog.md').getText()+"\n\nBuilt with Fabric loader: "+project.loader_version+" API: "+project.fabric_version
+		releaseType = !project.version.contains("-dev") ? 'release' : 'alpha'
+		addGameVersion project.minecraft_version
+		addGameVersion "Java 8"
+		
+		relations{
+			requiredLibrary "fabric"
+		}
+		afterEvaluate{
+			mainArtifact(remapJar.output)
+			uploadTask.dependsOn(remapJar)
+		}
+	  }
+	  options{
+	  	forgeGradleIntegration = false
 	  }
   }else{
 	println "no CurseForge key found as project.curseKey"
